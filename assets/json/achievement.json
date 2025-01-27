@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "title": "First Steps",
+    "description": "Complete your very first order",
+    "reward": 50
+  },
+  {
+    "id": 2,
+    "title": "Punctual Player",
+    "description": "Finish an order in under 30 seconds",
+    "reward": 75
+  },
+  {
+    "id": 3,
+    "title": "Collector’s Eye",
+    "description": "Deliver a box containing at least one collectible item",
+    "reward": 100
+  },
+  {
+    "id": 4,
+    "title": "Color Master",
+    "description": "Send a box without any color penalties",
+    "reward": 120
+  },
+  {
+    "id": 5,
+    "title": "Buster Booster",
+    "description": "Use a booster cell for extra points five times",
+    "reward": 150
+  },
+  {
+    "id": 6,
+    "title": "Speedy Sender",
+    "description": "Send five boxes before the timer hits 60 seconds",
+    "reward": 200
+  },
+  {
+    "id": 7,
+    "title": "Perfect Packer",
+    "description": "Fill the box completely with no empty cells",
+    "reward": 250
+  },
+  {
+    "id": 8,
+    "title": "Versatile Player",
+    "description": "Send boxes in three different celebrations in one session",
+    "reward": 300
+  },
+  {
+    "id": 9,
+    "title": "Giant Tamer",
+    "description": "Successfully place three giant balloons",
+    "reward": 350
+  },
+  {
+    "id": 10,
+    "title": "Balloon Baron",
+    "description": "Reach a total score of 1000 or more",
+    "reward": 500
+  }
+]
