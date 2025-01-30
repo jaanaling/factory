@@ -9,38 +9,25 @@ class GradientText extends StatelessWidget {
     this.isCenter = false,
     this.fontSize = 30,
     super.key,
-    required this.gradientColor,
-    required this.shaderColor,
-    required this.borderColor,
   });
 
   final String text;
-  final List<Color> gradientColor;
-  final Color shaderColor;
-  final Color borderColor;
 
   @override
   Widget build(BuildContext context) {
+    final List<Color> gradientColor = [Color(0xFFFFC700), Color(0xFFDC8400), Color(0xFF744B00)];
+    final Color shaderColor = Color(0xFF744B00);
+    final Color borderColor = Colors.white;
     final gradient = LinearGradient(
       colors: gradientColor,
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
+      stops: [0, 0.7,0.8]
     );
 
     return Stack(
+      alignment: Alignment.center,
       children: [
-        Text(
-          text,
-          style: TextStyle(
-            fontSize: fontSize,
-            fontWeight: FontWeight.w400,
-            fontFamily: 'Atop',
-            foreground: Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 5
-              ..color = borderColor,
-          ),
-        ),
         Text(
           text,
           textAlign: isCenter ? TextAlign.center : null,
@@ -52,7 +39,6 @@ class GradientText extends StatelessWidget {
             shadows: [
               BoxShadow(
                 color: shaderColor,
-                blurRadius: 6.5,
                 spreadRadius: 15,
                 offset: Offset(
                   2,
@@ -75,8 +61,20 @@ class GradientText extends StatelessWidget {
               fontSize: fontSize,
               fontFamily: 'Atop',
               fontWeight: FontWeight.w400,
-              letterSpacing: 1.50,
             ),
+          ),
+        ),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: fontSize,
+            fontWeight: FontWeight.w400,
+            fontFamily: 'Atop',
+            foreground: Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 1
+              ..color = borderColor,
+
           ),
         ),
       ],
@@ -118,10 +116,10 @@ class TextWithBorder extends StatelessWidget {
             fontSize: fontSize,
             fontWeight: FontWeight.w400,
             letterSpacing: letterSpacing,
-            fontFamily: fontFamily ?? 'Atop',
+            fontFamily: fontFamily ?? 'Alfa Slab One',
             foreground: Paint()
               ..style = PaintingStyle.stroke
-              ..strokeWidth = 5
+              ..strokeWidth = 3
               ..color = borderColor,
           ),
         ),
@@ -133,7 +131,7 @@ class TextWithBorder extends StatelessWidget {
             fontSize: fontSize,
             fontWeight: FontWeight.w400,
             letterSpacing: letterSpacing,
-            fontFamily: fontFamily ?? 'Atop',
+            fontFamily: fontFamily ?? 'Alfa Slab One',
             color: color ?? Colors.white,
           ),
         ),

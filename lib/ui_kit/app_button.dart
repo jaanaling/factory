@@ -13,7 +13,7 @@ class AppButton extends StatelessWidget {
     super.key,
     required this.onPressed,
     required this.title,
-    this.fontSize = 22,
+    this.fontSize = 25,
   });
 
   @override
