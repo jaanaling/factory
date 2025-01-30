@@ -1,6 +1,8 @@
 enum IconProvider {
   splash(imageName: 'splash.png'),
   logo(imageName: 'logo.png'),
+  button(imageName: 'button.png'),
+  buttonA(imageName: 'button_a.png'),
   back(imageName: 'back.svg'),
   achievements(imageName: 'achievements.svg'),
   coin(imageName: 'coin.png'),
