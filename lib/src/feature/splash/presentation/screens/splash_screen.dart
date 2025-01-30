@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 
 import '../../../../../routes/route_value.dart';
@@ -25,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> startLoading(BuildContext context) async {
     await Future.delayed(const Duration(milliseconds: 1000));
-    context.go(RouteValue.home.path);
+    // context.go(RouteValue.home.path);
   }
 
   @override
@@ -46,17 +47,18 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         ),
         Positioned(
-          top: getHeight(context, baseSize: 204),
+          top: getHeight(context, baseSize: 138),
           child: AppIcon(
             asset: IconProvider.logo.buildImageUrl(),
-            width: 304,
+            width: getWidth(context, percent: 1),
             fit: BoxFit.fitWidth,
           ),
         ),
-        const Positioned(
-          bottom: 51,
-          child: CircularProgressIndicator(
-            color: Color(0xFFFF00FB),
+       Positioned(
+          bottom: getHeight(context, baseSize: 51),
+          child: LoadingAnimationWidget.hexagonDots(
+            color: Color(0xFFFF5711),
+            size: 120
           ),
         )
       ],

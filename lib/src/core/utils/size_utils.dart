@@ -5,7 +5,7 @@ double getWidth(
       double? percent,
       double? baseSize,
     }) {
-  const baseWidth = 360;
+  const baseWidth = 1080;
 
   if (percent == null && baseSize == null) {
     throw Exception('Try adding percent or base size');
@@ -22,7 +22,7 @@ double getHeight(
       double? percent,
       double? baseSize,
     }) {
-  const baseHeight = 800;
+  const baseHeight = 2400;
 
   if (percent == null && baseSize == null) {
     throw Exception('Try adding percent or base size');
