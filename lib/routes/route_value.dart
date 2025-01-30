@@ -5,11 +5,8 @@ enum RouteValue {
   home(
     path: '/home',
   ),
-  article(
-    path: 'article',
-  ),
-  articles(
-    path: '/articles',
+  collection(
+    path: '/collection',
   ),
   select(
     path: 'select',

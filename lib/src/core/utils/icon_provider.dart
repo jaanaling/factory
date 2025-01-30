@@ -1,9 +1,13 @@
 enum IconProvider {
-  splash(imageName: 'splash.png'),
-  logo(imageName: 'logo.png'),
+  splash(imageName: 'splash.webp'),
+  logo(imageName: 'logo.webp'),
+  logoHome(imageName: 'logo_home.webp'),
   button(imageName: 'button.png'),
   buttonA(imageName: 'button_a.png'),
-  background(imageName: 'background.png'),
+  coins(imageName: 'coins.png'),
+  backgroundA(imageName: 'background_1.webp'),
+  backgroundB(imageName: 'background_2.webp'),
+  backgroundC(imageName: 'background_3.webp'),
 
   eiffelTower(imageName: 'eiffelTower.svg'),
   bigBen(imageName: 'bigBen.svg'),
@@ -23,8 +27,6 @@ enum IconProvider {
   b5(imageName: 'b5.png'),
   b6(imageName: 'b6.png'),
   b7(imageName: 'b7.png'),
-
-
 
   unknown(imageName: '');
 

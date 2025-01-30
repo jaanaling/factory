@@ -20,6 +20,8 @@ class RootNavigationScreen extends StatefulWidget {
 class _RootNavigationScreenState extends State<RootNavigationScreen> {
   @override
   Widget build(BuildContext context) {
+    final route = widget.navigationShell.shellRouteContext.routerState.matchedLocation;
+
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       child: Stack(
@@ -30,7 +32,7 @@ class _RootNavigationScreenState extends State<RootNavigationScreen> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(
-                    IconProvider.background.buildImageUrl(),
+                  getBackground(route),
                   ),
                   fit: BoxFit.cover,
                 ),
@@ -44,5 +46,16 @@ class _RootNavigationScreenState extends State<RootNavigationScreen> {
     );
   }
 
-  
+  String getBackground(String path){
+    switch (path){
+      case '/home':
+        return IconProvider.backgroundA.buildImageUrl();
+      case '/home/select':
+        return IconProvider.backgroundC.buildImageUrl();
+      case '/achievements':
+        return IconProvider.backgroundC.buildImageUrl();
+      default:
+        return IconProvider.backgroundB.buildImageUrl();
+    }
+  }
 }
