@@ -41,19 +41,19 @@ enum BalloonShape {
 String getBalloonAsset(BalloonShape shape) {
   switch (shape) {
     case BalloonShape.classic:
-      return IconProvider.balloon0.buildImageUrl();
+      return IconProvider.b2.buildImageUrl();
     case BalloonShape.ovalVert:
-      return IconProvider.balloon1.buildImageUrl();
+      return IconProvider.b3.buildImageUrl();
     case BalloonShape.ovalHorz:
-      return IconProvider.balloon2.buildImageUrl();
+      return IconProvider.b7.buildImageUrl();
     case BalloonShape.mini:
-      return IconProvider.balloon3.buildImageUrl();
+      return IconProvider.b1.buildImageUrl();
     case BalloonShape.giant:
-      return IconProvider.balloon4.buildImageUrl();
+      return IconProvider.b4.buildImageUrl();
     case BalloonShape.cube:
-      return IconProvider.gift.buildImageUrl();
+      return IconProvider.b5.buildImageUrl();
     case BalloonShape.donut:
-      return IconProvider.detecter.buildImageUrl();
+      return IconProvider.b6.buildImageUrl();
   }
 }
 

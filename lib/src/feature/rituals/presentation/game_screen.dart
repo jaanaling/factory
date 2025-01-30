@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:balloon_puzzle_factory/src/core/utils/app_icon.dart';
+import 'package:balloon_puzzle_factory/src/core/utils/icon_provider.dart';
 import 'package:balloon_puzzle_factory/src/feature/rituals/model/balloon.dart';
 import 'package:balloon_puzzle_factory/src/feature/rituals/model/grid.dart';
 import 'package:balloon_puzzle_factory/src/feature/rituals/model/holiday.dart';
 import 'package:balloon_puzzle_factory/src/feature/rituals/utils/logic.dart';
+import 'package:balloon_puzzle_factory/ui_kit/sound_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:balloon_puzzle_factory/src/feature/rituals/bloc/user_bloc.dart';
@@ -20,7 +23,7 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   final int boxWidth = 6;
   final int boxHeight = 6;
-  final double cellSize = 60; // пиксельный размер одной ячейки
+  final double cellSize = 40; // пиксельный размер одной ячейки
 
   late BoxGrid boxGrid;
 
@@ -47,6 +50,7 @@ class _GameScreenState extends State<GameScreen> {
   void initState() {
     super.initState();
 
+    playMusic();
     // Инициализируем сетку коробки
     boxGrid = BoxGrid(width: boxWidth, height: boxHeight);
 
@@ -122,15 +126,20 @@ class _GameScreenState extends State<GameScreen> {
           SizedBox(
             width: 120,
             child: Stack(
-              clipBehavior: Clip.none,
-              children: conveyorIds.map((id) {
-                final b = allBalloons[id]!;
-                return Positioned(
-                  left: 30, // центр
-                  bottom: b.conveyorY,
-                  child: _buildConveyorBalloonWidget(b),
-                );
-              }).toList(),
+              children: [
+                ConveyorBelt(),
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: conveyorIds.map((id) {
+                    final b = allBalloons[id]!;
+                    return Positioned(
+                      left: 30, // центр
+                      bottom: b.conveyorY,
+                      child: _buildConveyorBalloonWidget(b),
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
           ),
 
@@ -383,12 +392,12 @@ class _GameScreenState extends State<GameScreen> {
       {bool forConveyor = false, bool isDragging = false}) {
     final asset = getBalloonAsset(balloon.shape);
     if (forConveyor) {
-      return Image.asset(
-        asset,
+      return AppIcon(
+        asset: asset,
         width: 40,
         height: 40,
-        fit: BoxFit.contain,
-        color: balloon.color.withOpacity(0.85),
+         blendMode: BlendMode.modulate,
+        color: balloon.color,
       );
     } else {
       final size = getBalloonGridSize(balloon.shape);
@@ -396,12 +405,12 @@ class _GameScreenState extends State<GameScreen> {
       final h = size.height * cellSize;
       return Opacity(
         opacity: isDragging ? 0.8 : 1.0,
-        child: Image.asset(
-          asset,
+        child: AppIcon(
+          asset: asset,
           width: w,
           height: h,
-          fit: BoxFit.contain,
-          color: balloon.color.withOpacity(0.85),
+          blendMode: BlendMode.modulate,
+          color: balloon.color,
         ),
       );
     }
@@ -497,6 +506,66 @@ class _GameScreenState extends State<GameScreen> {
         },
         child: _buildBalloonImage(balloon),
       ),
+    );
+  }
+}
+
+class ConveyorBelt extends StatefulWidget {
+  @override
+  _ConveyorBeltState createState() => _ConveyorBeltState();
+}
+
+class _ConveyorBeltState extends State<ConveyorBelt>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  double offset = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2), // Скорость прокрутки
+    )..repeat();
+
+    _animation = Tween<double>(begin: 0, end: 1).animate(_controller)
+      ..addListener(() {
+        setState(() {
+          offset -= 2; // Скорость движения
+        });
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: AnimatedBuilder(
+            animation: _animation,
+            builder: (context, child) {
+              return Transform.translate(
+                offset: Offset(0, offset % 50), // Двигаем текстуру конвейера
+                child: Image.asset(
+                  IconProvider.roll
+                      .buildImageUrl(), // Заменить на текстуру конвейера
+                  repeat: ImageRepeat.repeatY,
+                  fit: BoxFit.cover,
+                ),
+              );
+            },
+          ),
+        ),
+        // Объекты на конвейере
+      ],
     );
   }
 }

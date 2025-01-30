@@ -21,7 +21,7 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 GoRouter buildGoRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: RouteValue.splash.path,
+  initialLocation: "${RouteValue.home.path}/${RouteValue.select.path}/${RouteValue.game.path}",
   routes: <RouteBase>[
     StatefulShellRoute.indexedStack(
       pageBuilder: (context, state, navigationShell) {
@@ -42,18 +42,19 @@ GoRouter buildGoRouter = GoRouter(
               },
               routes: <RouteBase>[
                 GoRoute(
-                  path: RouteValue.select.path,
-                  builder: (BuildContext context, GoRouterState state) {
-                    final extra = state.extra! as Map<String, dynamic>;
-                    return LevelsScreen();
-                  },
-                ),
-                GoRoute(
-                  path: RouteValue.game.path,
-                  builder: (BuildContext context, GoRouterState state) {
-                    return GameScreen();
-                  },
-                ),
+                    path: RouteValue.select.path,
+                    builder: (BuildContext context, GoRouterState state) {
+        
+                      return LevelsScreen();
+                    },
+                    routes: [
+                      GoRoute(
+                        path: RouteValue.game.path,
+                        builder: (BuildContext context, GoRouterState state) {
+                          return GameScreen();
+                        },
+                      ),
+                    ]),
               ],
             ),
           ],
