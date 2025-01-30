@@ -17,13 +17,13 @@ class AppRoot extends StatelessWidget {
       child: CupertinoApp.router(
         theme: const CupertinoThemeData(
           brightness: Brightness.dark,
-          primaryColor: Color(0xFFF135FF),
+          primaryColor: Color(0xFFFF5711),
           textTheme: CupertinoTextThemeData(
             textStyle: TextStyle(
               color: Colors.white,
               fontSize: 22,
-              fontFamily: 'Gunterz',
-              fontWeight: FontWeight.w500,
+              fontFamily: 'Atop',
+              fontWeight: FontWeight.w400,
             ),
           ),
         ),
