@@ -4,6 +4,8 @@ enum IconProvider {
   button(imageName: 'button.png'),
   buttonA(imageName: 'button_a.png'),
   background(imageName: 'background.png'),
+  box(imageName: 'box.png'),
+  papper(imageName: 'papper.png'),
 
   eiffelTower(imageName: 'eiffelTower.svg'),
   bigBen(imageName: 'bigBen.svg'),
@@ -23,8 +25,6 @@ enum IconProvider {
   b5(imageName: 'b5.png'),
   b6(imageName: 'b6.png'),
   b7(imageName: 'b7.png'),
-
-
 
   unknown(imageName: '');
 
