@@ -34,3 +34,16 @@ flutter:
     - assets/images/
     - assets/fonts/
     - assets/json/
+  fonts:
+    - family: Alfa Slab One
+      fonts:
+        - asset: assets/fonts/AlfaSlabOne-Regular.ttf
+          weight: 400
+    - family: Atop
+      fonts:
+        - asset: assets/fonts/Atop.ttf
+          weight: 400
+    - family: Shadows Into Light
+      fonts:
+        - asset: assets/fonts/ShadowsIntoLight-Regular.ttf
+          weight: 400
