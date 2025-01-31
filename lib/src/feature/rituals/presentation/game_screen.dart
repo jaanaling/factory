@@ -74,8 +74,9 @@ class _GameScreenState extends State<GameScreen> {
         if (timeLeft <= 0) {
           final oldUser = (context.read<UserBloc>().state as UserLoaded).user;
           final newUser = oldUser.copyWith(
-              record: max(oldUser.record, score),
-              coins: oldUser.coins + (score > 0 ? score ~/ 100 : 0));
+            record: max(oldUser.record, score),
+            coins: oldUser.coins + (score > 0 ? score ~/ 100 : 0),
+          );
           context.read<UserBloc>().add(UserPuzzleSolved(user: newUser));
           t.cancel();
           _endGame();
@@ -155,10 +156,11 @@ class _GameScreenState extends State<GameScreen> {
                 child: Column(
                   children: [
                     SizedBox(
-                        height: getHeight(
-                      context,
-                      baseSize: 240,
-                    )),
+                      height: getHeight(
+                        context,
+                        baseSize: 240,
+                      ),
+                    ),
                     Expanded(
                       child: Container(
                         width: boxPxWidth,
@@ -170,7 +172,9 @@ class _GameScreenState extends State<GameScreen> {
                             // Слой DragTargets (каждая клетка)
                             Padding(
                               padding: EdgeInsets.only(
-                                  left: cellSize / 1.7, top: cellSize / 4),
+                                left: cellSize / 1.7,
+                                top: cellSize / 4,
+                              ),
                               child: SizedBox(
                                 width: gridPxWidth,
                                 height: gridPxHeight,
@@ -181,34 +185,39 @@ class _GameScreenState extends State<GameScreen> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                  left: cellSize / 1.7, top: cellSize / 4),
+                                left: cellSize / 1.7,
+                                top: cellSize / 4,
+                              ),
                               child: SizedBox(
                                 width: gridPxWidth,
                                 height: gridPxHeight,
                                 child: Stack(
                                   children: [
                                     ...boxBalloons
-                                        .map((b) => _buildBoxBalloonWidget(b))
+                                        .map((b) => _buildBoxBalloonWidget(b)),
                                   ],
                                 ),
                               ),
                             ),
                             Align(
                               alignment: Alignment.topCenter,
-                              child:
-                                  Stack(alignment: Alignment.center, children: [
-                                AppIcon(
-                                  asset: IconProvider.papper.buildImageUrl(),
-                                  height: getHeight(context, percent: 0.12),
-                                ),
-                                Text(
-                                  selectedHoliday.name,
-                                  style: const TextStyle(
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  AppIcon(
+                                    asset: IconProvider.papper.buildImageUrl(),
+                                    height: getHeight(context, percent: 0.12),
+                                  ),
+                                  Text(
+                                    selectedHoliday.name,
+                                    style: const TextStyle(
                                       fontSize: 20,
                                       fontFamily: "Shadows Into Light",
-                                      color: Colors.black),
-                                ),
-                              ]),
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             // Слой шары
                           ],
@@ -222,10 +231,12 @@ class _GameScreenState extends State<GameScreen> {
                       },
                       title: 'SEND',
                     ),
-                    Gap(getHeight(
-                      context,
-                      baseSize: 320,
-                    ))
+                    Gap(
+                      getHeight(
+                        context,
+                        baseSize: 320,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -234,13 +245,18 @@ class _GameScreenState extends State<GameScreen> {
         ),
         Align(
           alignment: Alignment.bottomRight,
-          child: AppIcon(
-            asset: IconProvider.notice.buildImageUrl(),
-            width: getWidth(
-              context,
-              baseSize: 300,
+          child: AnimatedButton(
+            onPressed: () {
+              showAADialog(context);
+            },
+            child: AppIcon(
+              asset: IconProvider.notice.buildImageUrl(),
+              width: getWidth(
+                context,
+                baseSize: 300,
+              ),
+              fit: BoxFit.fitWidth,
             ),
-            fit: BoxFit.fitWidth,
           ),
         ),
         SafeArea(
@@ -296,10 +312,10 @@ class _GameScreenState extends State<GameScreen> {
                               baseSize: 44,
                             ),
                             fit: BoxFit.fitWidth,
-                          )
+                          ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
                 Spacer(),
@@ -329,7 +345,7 @@ class _GameScreenState extends State<GameScreen> {
                           Text(score.toString()),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ],
@@ -365,7 +381,7 @@ class _GameScreenState extends State<GameScreen> {
         BalloonShape.values[random.nextInt(BalloonShape.values.length)];
     final color = allColors[random.nextInt(allColors.length)];
     final hasCollector =
-        random.nextDouble() < 0.005; // 15% - коллекционный предмет
+        random.nextDouble() < 0.01; // 15% - коллекционный предмет
     // Начальная координата Y - за нижней границей
     final startY = 600.0;
 
@@ -428,7 +444,7 @@ class _GameScreenState extends State<GameScreen> {
   void _onSend() {
     final filled = boxGrid.filledCellsCount;
     final total = boxGrid.totalCells;
-    int boxScore = 100;
+    int boxScore = 0;
 
     if (filled < total) {
       boxScore -= (total - filled) * 2; // штраф за пустые ячейки
@@ -537,8 +553,11 @@ class _GameScreenState extends State<GameScreen> {
   /// Единая функция для отрисовки шара
   /// - forConveyor: если true, рисуем маленькую версию (например, 40x40)
   /// - иначе (в коробке) рисуем полный размер (исходя из кол-ва клеток)
-  Widget _buildBalloonImage(Balloon balloon,
-      {bool forConveyor = false, bool isDragging = false}) {
+  Widget _buildBalloonImage(
+    Balloon balloon, {
+    bool forConveyor = false,
+    bool isDragging = false,
+  }) {
     final asset = getBalloonAsset(balloon.shape);
     if (forConveyor) {
       return AppIcon(
@@ -638,7 +657,12 @@ class _GameScreenState extends State<GameScreen> {
 
 // Проверка, можно ли установить шар в указанных клетках (с учетом размера)
   bool _canPlaceBalloon(
-      Balloon balloon, int startX, int startY, int width, int height) {
+    Balloon balloon,
+    int startX,
+    int startY,
+    int width,
+    int height,
+  ) {
     // Проверка всех клеток, которые будет занимать шар
     for (int y = startY; y < startY + height; y++) {
       for (int x = startX; x < startX + width; x++) {
@@ -682,7 +706,12 @@ class _GameScreenState extends State<GameScreen> {
         onDraggableCanceled: (velocity, offset) {
           // Если не приняли, возвращаем шар на прежнее место
           boxGrid.place(
-              balloon.id, bx, by, sz.width.toInt(), sz.height.toInt());
+            balloon.id,
+            bx,
+            by,
+            sz.width.toInt(),
+            sz.height.toInt(),
+          );
           setState(() {});
         },
         child: _buildBalloonImage(balloon),
@@ -761,11 +790,12 @@ class _ConveyorBeltState extends State<ConveyorBelt>
   }
 }
 
-void showADialog(BuildContext context) {
+void showAADialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       int curIndex = 0;
+      int? openIndex;
       List<List<HolidayCondition>> holidayCondition = [
         [
           holidayConditions[0],
@@ -787,45 +817,161 @@ void showADialog(BuildContext context) {
         ],
       ];
 
-      return AlertDialog(
-        contentPadding: EdgeInsets.zero,
-        backgroundColor: Colors.transparent,
-        content: Stack(
-          alignment: Alignment.center,
-          children: [
-            AppIcon(
-              asset: IconProvider.list.buildImageUrl(),
-              width: getWidth(context, baseSize: 887),
-              fit: BoxFit.fitWidth,
-            ),
-            Positioned(
-              top: 0,
-              right: 0,
-              child: AnimatedButton(
-                child: AppIcon(
-                  asset: IconProvider.close.buildImageUrl(),
-                  width: getWidth(context, baseSize: 163),
-                  fit: BoxFit.fitWidth,
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return SizedBox(
+            width: getWidth(context, baseSize: 887),
+            height: getHeight(context, baseSize: 500),
+            child: AlertDialog(
+              contentPadding: EdgeInsets.zero,
+              backgroundColor: Colors.transparent,
+              content: SizedBox(
+                         width: getWidth(context, baseSize: 887),
+            height: getHeight(context, baseSize: 1400),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    AppIcon(
+                      asset: IconProvider.list.buildImageUrl(),
+                      width: getWidth(context, baseSize: 887),
+                        height: getHeight(context, baseSize: 1400),
+                     
+                    ),
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: AnimatedButton(
+                        child: AppIcon(
+                          asset: IconProvider.close.buildImageUrl(),
+                          width: getWidth(context, baseSize: 163),
+                          fit: BoxFit.fitWidth,
+                        ),
+                        onPressed: () {
+                          setState(() { if (openIndex == null) {
+                            context.pop();
+                          } else {
+                            openIndex = null;
+                          }});
+                         
+                        },
+                      ),
+                    ),
+                    if (openIndex == null)
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: List.generate(holidayCondition[curIndex].length,
+                            (index2) {
+                          return AnimatedButton(
+                            onPressed: () {
+                              setState(() {
+                                openIndex = index2;
+                              });
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              width: getWidth(context, baseSize: 505),
+                              height: getHeight(context, baseSize: 203),
+                              decoration: ShapeDecoration(
+                                color: Color(0xFFE2E0DE),
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      width: 3, color: Color(0xFFDE9F20)),
+                                  borderRadius: BorderRadius.circular(13),
+                                ),
+                              ),
+                              child: Text(
+                                holidayCondition[curIndex][index2].name,
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: "Shadows Into Light",
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                      )
+                    else
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            width: getWidth(context, baseSize: 505),
+                            height: getHeight(context, baseSize: 203),
+                            decoration: ShapeDecoration(
+                              color: Color(0xFFE2E0DE),
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    width: 3, color: Color(0xFFDE9F20)),
+                                borderRadius: BorderRadius.circular(13),
+                              ),
+                            ),
+                            child: Text(
+                              holidayCondition[curIndex][openIndex!].name,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontFamily: "Shadows Into Light",
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: getWidth(context, baseSize: 505),
+
+                            child: Text(
+                              holidayCondition[curIndex][openIndex!].description,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontFamily: "Shadows Into Light",
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        if (curIndex != 0 && openIndex == null)
+                          AnimatedButton(
+                            child: AppIcon(
+                              asset: IconProvider.back.buildImageUrl(),
+                              width: getWidth(context, baseSize: 163),
+                              fit: BoxFit.fitWidth,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                curIndex--;
+                              });
+                            },
+                          )
+                          else Spacer(),
+                        if (curIndex < holidayCondition.length - 1 &&
+                            openIndex == null)
+                          Transform.rotate(
+                            angle: 180 * pi / 180,
+                            child: AnimatedButton(
+                              child: AppIcon(
+                                asset: IconProvider.back.buildImageUrl(),
+                                width: getWidth(context, baseSize: 163),
+                                fit: BoxFit.fitWidth,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  curIndex++;
+                                });
+                              },
+                            ),
+                          ),
+                      ],
+                    )
+                  ],
                 ),
-                onPressed: () {
-                  context.pop();
-                },
               ),
             ),
-            Column(
-                children: List.generate(holidayCondition.length, (index) {
-              return Column(
-                children:
-                    List.generate(holidayCondition[index].length, (index2) {
-                  return AppButton(
-                    onPressed: () {},
-                    title: holidayCondition[index][index2].name,
-                  );
-                }),
-              );
-            }))
-          ],
-        ),
+          );
+        },
       );
     },
   );

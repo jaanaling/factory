@@ -18,34 +18,32 @@ final List<HolidayCondition> holidayConditions = [
   HolidayCondition(
     name: "Birthday",
     allowedColors: [Colors.red, Colors.yellow, Colors.orange, Colors.pink],
-    description: "Яркие, весёлые тона для дня рождения.",
+    description: "Bright, cheerful colors for a birthday party.",
   ),
   HolidayCondition(
     name: "Wedding",
     allowedColors: [Colors.white, Colors.pink, Colors.purple, gold],
-    description:
-        "Светлые, праздничные цвета (белый, розовый, фиолетовый, золотой).",
+    description: "Light, festive colors (white, pink, purple, gold).",
   ),
   HolidayCondition(
     name: "Halloween",
     allowedColors: [Colors.orange, Colors.black, Colors.purple],
-    description: "Традиционные цвета Хэллоуина: оранжевый, чёрный, фиолетовый.",
+    description: "Traditional Halloween colors: orange, black, purple.",
   ),
   HolidayCondition(
     name: "Christmas",
     allowedColors: [Colors.red, Colors.green, Colors.white, gold],
-    description:
-        "Классические рождественские цвета (красный, зелёный, белый, золотой).",
+    description: "Classic Christmas colors (red, green, white, gold).",
   ),
   HolidayCondition(
     name: "New Year",
     allowedColors: [Colors.white, Colors.blue, silver, gold],
-    description: "Холодные оттенки + серебристый и золотой.",
+    description: "Cold shades + silver and gold.",
   ),
   HolidayCondition(
     name: "Valentine's Day",
     allowedColors: [Colors.red, Colors.pink, Colors.white],
-    description: "Романтичные красно-розовые тона, символизирующие любовь.",
+    description: "Romantic red and pink tones to symbolize love.",
   ),
   HolidayCondition(
     name: "Easter",
@@ -55,23 +53,21 @@ final List<HolidayCondition> holidayConditions = [
       Colors.lightGreen,
       Colors.purple
     ],
-    description:
-        "Нежные пастельные оттенки, ассоциирующиеся с весной и Пасхой.",
+    description: "Delicate pastel shades associated with spring and Easter.",
   ),
   HolidayCondition(
     name: "Oktoberfest",
     allowedColors: [Colors.blue, Colors.white, Colors.brown],
-    description: "Традиционные цвета праздника пива: синий, белый, коричневый.",
+    description: "Traditional beer holiday colors: blue, white, brown.",
   ),
   HolidayCondition(
     name: "St. Patrick's Day",
     allowedColors: [Colors.green, Colors.orange, Colors.white],
-    description: "Основной цвет - зелёный, плюс оранжевый и белый.",
+    description: "The primary color is green, plus orange and white.",
   ),
   HolidayCondition(
     name: "Baby Shower",
     allowedColors: [Colors.pink, Colors.lightBlue, Colors.white],
-    description:
-        "Нежные «детские» оттенки для праздника перед рождением ребёнка.",
+    description: "Gentle “baby” shades for a pre-baby shower.",
   ),
 ];
