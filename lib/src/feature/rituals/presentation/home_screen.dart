@@ -8,17 +8,31 @@ import 'package:balloon_puzzle_factory/ui_kit/animated_button.dart';
 import 'package:balloon_puzzle_factory/ui_kit/app_button.dart';
 import 'package:balloon_puzzle_factory/ui_kit/coins_container.dart';
 import 'package:balloon_puzzle_factory/ui_kit/gradient_text.dart';
+import 'package:balloon_puzzle_factory/ui_kit/sound_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+      playMusic();
+  }
+  @override
   Widget build(BuildContext context) {
+    
     return BlocBuilder<UserBloc, UserState>(
       builder: (context, state) {
         if (state is! UserLoaded) {

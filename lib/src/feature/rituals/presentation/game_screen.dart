@@ -59,7 +59,7 @@ class _GameScreenState extends State<GameScreen> {
   void initState() {
     super.initState();
 
-    playMusic();
+  
     // Инициализируем сетку коробки
     boxGrid = BoxGrid(width: gridWidth, height: gridHeight);
 
@@ -90,7 +90,7 @@ class _GameScreenState extends State<GameScreen> {
     });
 
     // Периодически добавляем шары на конвейер (каждые 2 секунды)
-    Timer.periodic(Duration(microseconds: 500000 ~/ 3 * widget.difficalty),
+    Timer.periodic(Duration(microseconds: 500000 ~/(0.5 * widget.difficalty)),
         (t) {
       if (timeLeft <= 0) {
         t.cancel();
@@ -444,7 +444,7 @@ class _GameScreenState extends State<GameScreen> {
   void _onSend() {
     final filled = boxGrid.filledCellsCount;
     final total = boxGrid.totalCells;
-    int boxScore = 0;
+    int boxScore = 35;
 
     if (filled < total) {
       boxScore -= (total - filled) * 2; // штраф за пустые ячейки
@@ -826,16 +826,15 @@ void showAADialog(BuildContext context) {
               contentPadding: EdgeInsets.zero,
               backgroundColor: Colors.transparent,
               content: SizedBox(
-                         width: getWidth(context, baseSize: 887),
-            height: getHeight(context, baseSize: 1400),
+                width: getWidth(context, baseSize: 887),
+                height: getHeight(context, baseSize: 1400),
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
                     AppIcon(
                       asset: IconProvider.list.buildImageUrl(),
                       width: getWidth(context, baseSize: 887),
-                        height: getHeight(context, baseSize: 1400),
-                     
+                      height: getHeight(context, baseSize: 1400),
                     ),
                     Positioned(
                       top: 0,
@@ -847,20 +846,21 @@ void showAADialog(BuildContext context) {
                           fit: BoxFit.fitWidth,
                         ),
                         onPressed: () {
-                          setState(() { if (openIndex == null) {
-                            context.pop();
-                          } else {
-                            openIndex = null;
-                          }});
-                         
+                          setState(() {
+                            if (openIndex == null) {
+                              context.pop();
+                            } else {
+                              openIndex = null;
+                            }
+                          });
                         },
                       ),
                     ),
                     if (openIndex == null)
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: List.generate(holidayCondition[curIndex].length,
-                            (index2) {
+                        children: List.generate(
+                            holidayCondition[curIndex].length, (index2) {
                           return AnimatedButton(
                             onPressed: () {
                               setState(() {
@@ -918,9 +918,9 @@ void showAADialog(BuildContext context) {
                           ),
                           SizedBox(
                             width: getWidth(context, baseSize: 505),
-
                             child: Text(
-                              holidayCondition[curIndex][openIndex!].description,
+                              holidayCondition[curIndex][openIndex!]
+                                  .description,
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontFamily: "Shadows Into Light",
@@ -946,7 +946,8 @@ void showAADialog(BuildContext context) {
                               });
                             },
                           )
-                          else Spacer(),
+                        else
+                          Spacer(),
                         if (curIndex < holidayCondition.length - 1 &&
                             openIndex == null)
                           Transform.rotate(

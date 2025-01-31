@@ -36,7 +36,7 @@ class User {
   }
 
   static User get initial => User(
-        coins: 0,
+        coins: 10,
         achievements: [],
         puzzlesSolved: 0,
         record: 0,
