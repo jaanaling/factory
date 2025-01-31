@@ -8,6 +8,8 @@ enum IconProvider {
   backgroundA(imageName: 'background_1.webp'),
   backgroundB(imageName: 'background_2.webp'),
   backgroundC(imageName: 'background_3.webp'),
+  gift(imageName: 'gift.webp'),
+  giftGrey(imageName: 'gift_grey.webp'),
   box(imageName: 'box.png'),
   papper(imageName: 'papper.png'),
   timer(imageName: 'timer.png'),

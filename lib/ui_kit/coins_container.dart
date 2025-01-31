@@ -5,7 +5,18 @@ import 'package:flutter/material.dart';
 
 class CoinsContainer extends StatelessWidget {
   final int coinsCount;
-  const CoinsContainer({super.key, required this.coinsCount});
+  final String? text;
+  final double? width;
+  final double? paddingSize;
+  final double? fontSize;
+  const CoinsContainer({
+    super.key,
+    required this.coinsCount,
+    this.text,
+    this.width,
+    this.paddingSize,
+    this.fontSize,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +34,19 @@ class CoinsContainer extends StatelessWidget {
         SizedBox(
           width: getWidth(
                 context,
-                baseSize: 240,
+                baseSize: width ?? 240,
               ) -
               getWidth(
                 context,
-                baseSize: 83,
+                baseSize: paddingSize ?? 83,
               ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(coinsCount.toString()),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(text ?? coinsCount.toString(), style: TextStyle(fontSize: fontSize),),
+              ),
               AppIcon(
                 asset: IconProvider.coins.buildImageUrl(),
                 width: getWidth(
@@ -40,10 +54,10 @@ class CoinsContainer extends StatelessWidget {
                   baseSize: 44,
                 ),
                 fit: BoxFit.fitWidth,
-              )
+              ),
             ],
           ),
-        )
+        ),
       ],
     );
   }

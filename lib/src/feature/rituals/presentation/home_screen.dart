@@ -80,7 +80,46 @@ class HomeScreen extends StatelessWidget {
                 AppButton(onPressed: (){}, title: 'ACHIEVEMENTS',),
                 Gap(8),
                 AppButton(onPressed: (){}, title: 'COLLECTION',),
-                Spacer()
+                Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AppIcon(
+                          asset: IconProvider.gift.buildImageUrl(),
+                          width: getWidth(context, baseSize: 298),
+                          fit: BoxFit.fitWidth,
+                        ),
+                        CoinsContainer(coinsCount: 10, text: '+ 10', width: 186, paddingSize: 0, fontSize: 16,)
+                      ],
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AppIcon(
+                          asset: IconProvider.giftGrey.buildImageUrl(),
+                          width: getWidth(context, baseSize: 298),
+                          fit: BoxFit.fitWidth,
+                        ),
+                        CoinsContainer(coinsCount: 10, text: '+ 15', width: 186, paddingSize: 0, fontSize: 16,)
+                      ],
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AppIcon(
+                          asset: IconProvider.giftGrey.buildImageUrl(),
+                          width: getWidth(context, baseSize: 298),
+                          fit: BoxFit.fitWidth,
+                        ),
+                        CoinsContainer(coinsCount: 10, text: '+ 20', width: 186, paddingSize: 0, fontSize: 16,)
+                      ],
+                    ),
+                  ],
+                ),
+                Gap(18),
               ],
             ),
           ),
