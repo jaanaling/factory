@@ -10,11 +10,13 @@ class AppButton extends StatelessWidget {
   final String title;
   final double fontSize;
   final bool isGrey;
+  final double width;
   const AppButton(
       {super.key,
       required this.onPressed,
       required this.title,
       this.fontSize = 25,
+      this.width = 830,
       this.isGrey = false});
 
   @override
@@ -28,14 +30,14 @@ class AppButton extends StatelessWidget {
             asset: isGrey
                 ? IconProvider.buttonGrey.buildImageUrl()
                 : IconProvider.button.buildImageUrl(),
-            width: getWidth(context, baseSize: 830),
+            width: getWidth(context, baseSize: width),
             fit: BoxFit.fitWidth,
           ),
           TextWithBorder(
             text: title,
             borderColor: Colors.white,
             fontSize: fontSize,
-            color: isGrey ? const Color(0xFFA0A0A0): const Color(0xFFC30E14),
+            color: isGrey ? const Color(0xFFA0A0A0) : const Color(0xFFC30E14),
           ),
         ],
       ),

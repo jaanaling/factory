@@ -1,4 +1,6 @@
 import 'package:balloon_puzzle_factory/src/core/utils/app_icon.dart';
+import 'package:balloon_puzzle_factory/src/core/utils/icon_provider.dart';
+import 'package:balloon_puzzle_factory/src/core/utils/size_utils.dart';
 import 'package:balloon_puzzle_factory/ui_kit/animated_button.dart';
 import 'package:flutter/material.dart';
 
@@ -32,10 +34,26 @@ class _SoundButtonState extends State<SoundButton> {
               }
             });
           },
-          child: Icon(
-            value ? Icons.volume_up : Icons.volume_off,
-            size: 24,
-            color: Colors.white,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              AppIcon(
+                asset: IconProvider.buttonA.buildImageUrl(),
+                width: getWidth(
+                  context,
+                  baseSize: 240,
+                ),
+                fit: BoxFit.fitWidth,
+              ),
+              Icon(
+                value ? Icons.volume_up : Icons.volume_off,
+                size: getWidth(
+                  context,
+                  baseSize: 100,
+                ),
+                color: Colors.white,
+              ),
+            ],
           ),
         );
       },

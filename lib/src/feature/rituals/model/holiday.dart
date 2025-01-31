@@ -27,7 +27,7 @@ final List<HolidayCondition> holidayConditions = [
   ),
   HolidayCondition(
     name: "Halloween",
-    allowedColors: [Colors.orange, Colors.black, Colors.purple],
+    allowedColors: [Colors.orange, Color(0xFF00101E), Colors.purple],
     description: "Traditional Halloween colors: orange, black, purple.",
   ),
   HolidayCondition(

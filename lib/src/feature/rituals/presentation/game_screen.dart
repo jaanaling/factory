@@ -9,6 +9,7 @@ import 'package:balloon_puzzle_factory/src/feature/rituals/model/collection.dart
 import 'package:balloon_puzzle_factory/src/feature/rituals/model/grid.dart';
 import 'package:balloon_puzzle_factory/src/feature/rituals/model/holiday.dart';
 import 'package:balloon_puzzle_factory/src/feature/rituals/utils/logic.dart';
+import 'package:balloon_puzzle_factory/ui_kit/alert_dialog.dart';
 import 'package:balloon_puzzle_factory/ui_kit/animated_button.dart';
 import 'package:balloon_puzzle_factory/ui_kit/app_button.dart';
 import 'package:balloon_puzzle_factory/ui_kit/sound_button.dart';
@@ -79,7 +80,7 @@ class _GameScreenState extends State<GameScreen> {
           );
           context.read<UserBloc>().add(UserPuzzleSolved(user: newUser));
           t.cancel();
-          _endGame();
+          showEndAlertDialog(context, oldUser.record < score, score, widget.difficalty);
         }
       });
     });
@@ -353,25 +354,6 @@ class _GameScreenState extends State<GameScreen> {
           ),
         ),
       ],
-    );
-  }
-
-  void _endGame() {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("Время вышло"),
-        content: Text("Игра завершена!\nВаш счёт: $score"),
-        actions: [
-          TextButton(
-            onPressed: () {
-              context.pop(); // Закрываем диалог
-              context.pop(); // Закрываем экран игры
-            },
-            child: const Text("OK"),
-          ),
-        ],
-      ),
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:balloon_puzzle_factory/routes/route_value.dart';
 import 'package:balloon_puzzle_factory/src/core/utils/app_icon.dart';
 import 'package:balloon_puzzle_factory/src/core/utils/icon_provider.dart';
 import 'package:balloon_puzzle_factory/src/core/utils/size_utils.dart';
@@ -9,7 +10,8 @@ import 'package:go_router/go_router.dart';
 import 'animated_button.dart';
 import 'gradient_text.dart';
 
-void showEndAlertDialog(BuildContext context, bool isRecord, int score) {
+void showEndAlertDialog(
+    BuildContext context, bool isRecord, int score, int difficulty) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -51,7 +53,12 @@ void showEndAlertDialog(BuildContext context, bool isRecord, int score) {
                   ),
                 Gap(8),
                 AnimatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.pop();
+                    context.pushReplacement(
+                        '${RouteValue.home.path}/${RouteValue.select.path}/${RouteValue.game.path}',
+                        extra: difficulty);
+                  },
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
@@ -71,7 +78,10 @@ void showEndAlertDialog(BuildContext context, bool isRecord, int score) {
                 ),
                 Gap(6),
                 AnimatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.pop();
+                    context.pushReplacement(RouteValue.home.path);
+                  },
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
@@ -102,6 +112,7 @@ void showEndAlertDialog(BuildContext context, bool isRecord, int score) {
                 ),
                 onPressed: () {
                   context.pop();
+                  context.pushReplacement(RouteValue.home.path);
                 },
               ),
             ),

@@ -93,7 +93,7 @@ final List<Color> allColors = [
   Colors.pink,
   Colors.cyan,
   Colors.white,
-  Colors.black,
+  Color(0xFF00101E),
   gold,
   silver,
   Colors.brown,

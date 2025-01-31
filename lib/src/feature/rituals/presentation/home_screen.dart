@@ -47,9 +47,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 horizontal: getWidth(context, baseSize: 21)),
             child: Column(
               children: [
-                Align(
-                    alignment: Alignment.centerLeft,
-                    child: CoinsContainer(coinsCount: state.user.coins)),
+                Row(
+                  children: [
+                    CoinsContainer(coinsCount: state.user.coins),
+                    Gap(16),
+                    SoundButton()
+                  ],
+                ),
                 AppIcon(
                   asset: IconProvider.logoHome.buildImageUrl(),
                   width: getWidth(context, percent: 1),

@@ -103,8 +103,48 @@ void showADialog(BuildContext context) {
           children: [
             AppIcon(
               asset: IconProvider.alertDialog.buildImageUrl(),
-              width: getWidth(context, baseSize: 1024),
+              width: getWidth(context, percent: 1),
               fit: BoxFit.fitWidth,
+            ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Gap(getHeight(context, baseSize: 8)),
+                AppButton(
+                  width: 700,
+                  onPressed: () {
+                    context.pop();
+                    context.push(
+                        '${RouteValue.home.path}/${RouteValue.select.path}/${RouteValue.game.path}',
+                        extra: 1);
+                  },
+                  title: 'EASY',
+                ),
+                Gap(8),
+                AppButton(
+                  width: 700,
+                  onPressed: () {
+                    context.pop();
+                    context.push(
+                        '${RouteValue.home.path}/${RouteValue.select.path}/${RouteValue.game.path}',
+                        extra: 2);
+                  },
+                  title: 'MEDIUM',
+                ),
+                Gap(8),
+                AppButton(
+                  width: 700,
+                  onPressed: () {
+                    {
+                      context.pop();
+                      context.push(
+                          '${RouteValue.home.path}/${RouteValue.select.path}/${RouteValue.game.path}',
+                          extra: 3);
+                    }
+                  },
+                  title: 'HARD',
+                ),
+              ],
             ),
             Positioned(
               top: 0,
@@ -119,32 +159,6 @@ void showADialog(BuildContext context) {
                   context.pop();
                 },
               ),
-            ),
-            AppButton(
-              onPressed: () {
-                context.push(
-                    '${RouteValue.home.path}/${RouteValue.select.path}/${RouteValue.game.path}',
-                    extra: 1);
-              },
-              title: 'EASY',
-            ),
-            AppButton(
-              onPressed: () {
-                context.push(
-                    '${RouteValue.home.path}/${RouteValue.select.path}/${RouteValue.game.path}',
-                    extra: 2);
-              },
-              title: 'MEDIUM',
-            ),
-            AppButton(
-              onPressed: () {
-                {
-                  context.push(
-                      '${RouteValue.home.path}/${RouteValue.select.path}/${RouteValue.game.path}',
-                      extra: 3);
-                }
-              },
-              title: 'HARD',
             ),
           ],
         ),
