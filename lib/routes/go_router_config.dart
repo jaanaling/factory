@@ -21,7 +21,7 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 GoRouter buildGoRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: "${RouteValue.home.path}/${RouteValue.select.path}/${RouteValue.game.path}",
+  initialLocation: RouteValue.splash.path,
   routes: <RouteBase>[
     StatefulShellRoute.indexedStack(
       pageBuilder: (context, state, navigationShell) {

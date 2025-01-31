@@ -1,3 +1,4 @@
+import 'package:balloon_puzzle_factory/routes/route_value.dart';
 import 'package:balloon_puzzle_factory/src/core/utils/app_icon.dart';
 import 'package:balloon_puzzle_factory/src/core/utils/icon_provider.dart';
 import 'package:balloon_puzzle_factory/src/core/utils/size_utils.dart';
@@ -75,11 +76,24 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
                 Spacer(),
-                AppButton(onPressed: (){}, title: 'START', fontSize: 42,),
+                AppButton(
+                  onPressed: () {
+                    context.push(
+                        '${RouteValue.home.path}/${RouteValue.select.path}');
+                  },
+                  title: 'START',
+                  fontSize: 42,
+                ),
                 Gap(8),
-                AppButton(onPressed: (){}, title: 'ACHIEVEMENTS',),
+                AppButton(
+                  onPressed: () {},
+                  title: 'ACHIEVEMENTS',
+                ),
                 Gap(8),
-                AppButton(onPressed: (){}, title: 'COLLECTION',),
+                AppButton(
+                  onPressed: () {},
+                  title: 'COLLECTION',
+                ),
                 Spacer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -92,7 +106,20 @@ class HomeScreen extends StatelessWidget {
                           width: getWidth(context, baseSize: 298),
                           fit: BoxFit.fitWidth,
                         ),
-                        CoinsContainer(coinsCount: 10, text: '+ 10', width: 186, paddingSize: 0, fontSize: 16,)
+                        TextWithBorder(
+                          text: '1 Day',
+                          borderColor: Colors.white,
+                          fontSize: 15,
+                          color: const Color(0xFFC30E14),
+                        ),
+                        Gap(2),
+                        CoinsContainer(
+                          coinsCount: 10,
+                          text: '+ 10',
+                          width: 186,
+                          paddingSize: 0,
+                          fontSize: 16,
+                        )
                       ],
                     ),
                     Column(
@@ -103,7 +130,20 @@ class HomeScreen extends StatelessWidget {
                           width: getWidth(context, baseSize: 298),
                           fit: BoxFit.fitWidth,
                         ),
-                        CoinsContainer(coinsCount: 10, text: '+ 15', width: 186, paddingSize: 0, fontSize: 16,)
+                        TextWithBorder(
+                          text: '2 Day',
+                          borderColor: Colors.white,
+                          fontSize: 15,
+                          color: const Color(0xFFC30E14),
+                        ),
+                        Gap(2),
+                        CoinsContainer(
+                          coinsCount: 10,
+                          text: '+ 15',
+                          width: 186,
+                          paddingSize: 0,
+                          fontSize: 16,
+                        )
                       ],
                     ),
                     Column(
@@ -114,12 +154,25 @@ class HomeScreen extends StatelessWidget {
                           width: getWidth(context, baseSize: 298),
                           fit: BoxFit.fitWidth,
                         ),
-                        CoinsContainer(coinsCount: 10, text: '+ 20', width: 186, paddingSize: 0, fontSize: 16,)
+                        TextWithBorder(
+                          text: '3 Day',
+                          borderColor: Colors.white,
+                          fontSize: 15,
+                          color: const Color(0xFFC30E14),
+                        ),
+                        Gap(2),
+                        CoinsContainer(
+                          coinsCount: 10,
+                          text: '+ 20',
+                          width: 186,
+                          paddingSize: 0,
+                          fontSize: 16,
+                        )
                       ],
                     ),
                   ],
                 ),
-                Gap(18),
+                Spacer()
               ],
             ),
           ),

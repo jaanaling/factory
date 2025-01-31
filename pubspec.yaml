@@ -49,3 +49,7 @@ flutter:
       fonts:
         - asset: assets/fonts/ShadowsIntoLight-Regular.ttf
           weight: 400
+    - family: Sabalon
+      fonts:
+        - asset: assets/fonts/Sabalon.otf
+          weight: 400
