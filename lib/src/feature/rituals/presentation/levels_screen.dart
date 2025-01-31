@@ -1,4 +1,5 @@
 import 'package:balloon_puzzle_factory/routes/go_router_config.dart';
+import 'package:balloon_puzzle_factory/routes/route_value.dart';
 import 'package:balloon_puzzle_factory/src/core/utils/app_icon.dart';
 import 'package:balloon_puzzle_factory/src/core/utils/icon_provider.dart';
 import 'package:balloon_puzzle_factory/src/core/utils/size_utils.dart';
@@ -58,18 +59,83 @@ class LevelsScreen extends StatelessWidget {
               ),
               Gap(16),
               AppButton(
-                onPressed: () {},
+                onPressed: () {showADialog(context);},
                 title: 'CLASSIC',
               ),
-              ...List.generate(balloonFactories.length, (index) {
-                return ChainButton(
-                    price: 100*(index+1),
-                    title: balloonFactories[index].toUpperCase());
-              },)
+              ...List.generate(
+                balloonFactories.length,
+                (index) {
+                  return ChainButton(
+                      price: 100 * (index + 1),
+                      title: balloonFactories[index].toUpperCase());
+                },
+              )
             ],
           ),
         ),
       ),
     );
   }
+}
+
+void showADialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        contentPadding: EdgeInsets.zero,
+        backgroundColor: Colors.transparent,
+        content: Stack(
+          alignment: Alignment.center,
+          children: [
+            AppIcon(
+              asset: IconProvider.alertDialog.buildImageUrl(),
+              width: getWidth(context, baseSize: 1024),
+              fit: BoxFit.fitWidth,
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: AnimatedButton(
+                child: AppIcon(
+                  asset: IconProvider.close.buildImageUrl(),
+                  width: getWidth(context, baseSize: 163),
+                  fit: BoxFit.fitWidth,
+                ),
+                onPressed: () {
+                  context.pop();
+                },
+              ),
+            ),
+            AppButton(
+              onPressed: () {
+                context.push(
+                    '${RouteValue.home.path}/${RouteValue.select.path}/${RouteValue.game.path}',
+                    extra: 1);
+              },
+              title: 'EASY',
+            ),
+            AppButton(
+              onPressed: () {
+                context.push(
+                    '${RouteValue.home.path}/${RouteValue.select.path}/${RouteValue.game.path}',
+                    extra: 2);
+              },
+              title: 'MEDIUM',
+            ),
+            AppButton(
+              onPressed: () {
+                {
+                  context.push(
+                      '${RouteValue.home.path}/${RouteValue.select.path}/${RouteValue.game.path}',
+                      extra: 3);
+                }
+              },
+              title: 'HARD',
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }

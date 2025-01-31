@@ -5,25 +5,32 @@ import 'package:balloon_puzzle_factory/src/core/utils/app_icon.dart';
 import 'package:balloon_puzzle_factory/src/core/utils/icon_provider.dart';
 import 'package:balloon_puzzle_factory/src/core/utils/size_utils.dart';
 import 'package:balloon_puzzle_factory/src/feature/rituals/model/balloon.dart';
+import 'package:balloon_puzzle_factory/src/feature/rituals/model/collection.dart';
 import 'package:balloon_puzzle_factory/src/feature/rituals/model/grid.dart';
 import 'package:balloon_puzzle_factory/src/feature/rituals/model/holiday.dart';
 import 'package:balloon_puzzle_factory/src/feature/rituals/utils/logic.dart';
+import 'package:balloon_puzzle_factory/ui_kit/app_button.dart';
 import 'package:balloon_puzzle_factory/ui_kit/sound_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:balloon_puzzle_factory/src/feature/rituals/bloc/user_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class GameScreen extends StatefulWidget {
-  const GameScreen({super.key});
+  final int difficalty;
+
+  const GameScreen({super.key, required this.difficalty});
 
   @override
   State<GameScreen> createState() => _GameScreenState();
 }
 
 class _GameScreenState extends State<GameScreen> {
-  final int gridWidth = 9;
-  final int gridHeight = 12;
+  final int gridWidth = 6;
+  final int gridHeight = 9;
+  final Set<int> collection = {};
+
 
   late double cellSize; // пиксельный размер одной ячейки
 
@@ -65,6 +72,11 @@ class _GameScreenState extends State<GameScreen> {
       setState(() {
         timeLeft--;
         if (timeLeft <= 0) {
+          final oldUser = (context.read<UserBloc>().state as UserLoaded).user;
+          final newUser = oldUser.copyWith(
+              record: max(oldUser.record, score),
+              coins: oldUser.coins + (score > 0 ? score ~/ 100 : 0));
+          context.read<UserBloc>().add(UserPuzzleSolved(user: newUser));
           t.cancel();
           _endGame();
         }
@@ -77,7 +89,7 @@ class _GameScreenState extends State<GameScreen> {
     });
 
     // Периодически добавляем шары на конвейер (каждые 2 секунды)
-    Timer.periodic(const Duration(seconds: 2), (t) {
+    Timer.periodic( Duration(microseconds: 2000000 ~/ 3 * widget.difficalty), (t) {
       if (timeLeft <= 0) {
         t.cancel();
       } else {
@@ -98,8 +110,8 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    cellSize = getWidth(context, percent: 0.049);
-    final boxPxWidth = gridWidth * cellSize * 2;
+    cellSize = getWidth(context, percent: 0.067);
+    final boxPxWidth = gridWidth * cellSize * 3;
     final boxPxHeight = gridHeight * cellSize * (1 / 3);
     final gridPxWidth = gridWidth * cellSize;
     final gridPxHeight = gridHeight * cellSize;
@@ -107,93 +119,44 @@ class _GameScreenState extends State<GameScreen> {
     // Собираем шары, которые сейчас в коробке
     final boxBalloons = allBalloons.values.where((b) => b.isInBox).toList();
 
-    return SafeArea(
-      child: Stack(
-        children: [
-          Row(
-            children: [
-              // Левая часть - конвейер
-              SizedBox(
-                width: 70,
-                child: Stack(
-                  children: [
-                    ConveyorBelt(),
-                    Stack(
-                      clipBehavior: Clip.none,
-                      children: conveyorIds.map((id) {
-                        final b = allBalloons[id]!;
-                        return Positioned(
-                          left: 15, // центр
-                          bottom: b.conveyorY,
-                          child: _buildConveyorBalloonWidget(b),
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
+    return Stack(
+      children: [
+        Row(
+          children: [
+            // Левая часть - конвейер
+            SizedBox(
+              width: 70,
+              child: Stack(
+                children: [
+                  ConveyorBelt(),
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: conveyorIds.map((id) {
+                      final b = allBalloons[id]!;
+                      return Positioned(
+                        left: 15, // центр
+                        bottom: b.conveyorY,
+                        child: _buildConveyorBalloonWidget(b),
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
+            ),
 
-              // Правая часть - коробка + кнопки
-              Expanded(
+            // Правая часть - коробка + кнопки
+            Expanded(
+              child: SafeArea(
+                left: false,
+                right: false,
+                bottom: false,
                 child: Column(
                   children: [
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            AppIcon(
-                              asset: IconProvider.buttonA.buildImageUrl(),
-                              width: getWidth(
-                                context,
-                                baseSize: 240,
-                              ),
-                              fit: BoxFit.fitWidth,
-                            ),
-                            SizedBox(
-                              width: getWidth(
-                                    context,
-                                    baseSize: 240,
-                                  ) -
-                                  getWidth(
-                                    context,
-                                    baseSize: 83,
-                                  ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(timeLeft.toString()),
-                                  AppIcon(
-                                    asset: IconProvider.timer.buildImageUrl(),
-                                    width: getWidth(
-                                      context,
-                                      baseSize: 44,
-                                    ),
-                                    fit: BoxFit.fitWidth,
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        Stack(alignment: Alignment.center, children: [
-                          AppIcon(
-                            asset: IconProvider.papper.buildImageUrl(),
-                            height: getHeight(context, percent: 0.12),
-                          ),
-                          Text(
-                            "${selectedHoliday.name}",
-                            style: const TextStyle(
-                                fontSize: 20,
-                                fontFamily: "Shadows Into Light",
-                                color: Colors.black),
-                          ),
-                        ]),
-                      ],
-                    ),
+                    SizedBox(
+                        height: getHeight(
+                      context,
+                      baseSize: 240,
+                    )),
                     Expanded(
                       child: Container(
                         width: boxPxWidth,
@@ -205,7 +168,7 @@ class _GameScreenState extends State<GameScreen> {
                             // Слой DragTargets (каждая клетка)
                             Padding(
                               padding: EdgeInsets.only(
-                                  left: cellSize / 1.1, top: cellSize / 4),
+                                  left: cellSize / 1.7, top: cellSize / 4),
                               child: SizedBox(
                                 width: gridPxWidth,
                                 height: gridPxHeight,
@@ -216,7 +179,7 @@ class _GameScreenState extends State<GameScreen> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                  left: cellSize / 1.1, top: cellSize / 4),
+                                  left: cellSize / 1.7, top: cellSize / 4),
                               child: SizedBox(
                                 width: gridPxWidth,
                                 height: gridPxHeight,
@@ -228,41 +191,59 @@ class _GameScreenState extends State<GameScreen> {
                                 ),
                               ),
                             ),
+                            Align(
+                              alignment: Alignment.topCenter,
+                              child:
+                                  Stack(alignment: Alignment.center, children: [
+                                AppIcon(
+                                  asset: IconProvider.papper.buildImageUrl(),
+                                  height: getHeight(context, percent: 0.12),
+                                ),
+                                Text(
+                                  selectedHoliday.name,
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontFamily: "Shadows Into Light",
+                                      color: Colors.black),
+                                ),
+                              ]),
+                            ),
                             // Слой шары
                           ],
                         ),
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: _onSend,
-                      child: const Text("Send"),
-                    ),
-                    const SizedBox(height: 10),
-                    ElevatedButton(
+                    Gap(10),
+                    AppButton(
                       onPressed: () {
-                        // Кнопка "Notes" или что-то ещё
+                        _onSend();
                       },
-                      child: const Text("Notes"),
+                      title: 'SEND',
                     ),
-                    const SizedBox(height: 10),
+                    Gap(getHeight(
+                      context,
+                      baseSize: 320,
+                    ))
                   ],
                 ),
               ),
-            ],
+            ),
+          ],
+        ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: AppIcon(
+            asset: IconProvider.notice.buildImageUrl(),
+            width: getWidth(
+              context,
+              baseSize: 300,
+            ),
+            fit: BoxFit.fitWidth,
           ),
-           Align(
-             alignment: Alignment.bottomRight,
-             child: AppIcon(
-                    asset: IconProvider.notice.buildImageUrl(),
-                    width: getWidth(
-                      context,
-                      baseSize: 486,
-                    ),
-                    fit: BoxFit.fitWidth,
-                  ),
-           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
+        ),
+        SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -274,6 +255,47 @@ class _GameScreenState extends State<GameScreen> {
                   ),
                   fit: BoxFit.fitWidth,
                 ),
+                Spacer(
+                  flex: 2,
+                ),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    AppIcon(
+                      asset: IconProvider.buttonA.buildImageUrl(),
+                      width: getWidth(
+                        context,
+                        baseSize: 240,
+                      ),
+                      fit: BoxFit.fitWidth,
+                    ),
+                    SizedBox(
+                      width: getWidth(
+                            context,
+                            baseSize: 240,
+                          ) -
+                          getWidth(
+                            context,
+                            baseSize: 83,
+                          ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(timeLeft.toString()),
+                          AppIcon(
+                            asset: IconProvider.timer.buildImageUrl(),
+                            width: getWidth(
+                              context,
+                              baseSize: 44,
+                            ),
+                            fit: BoxFit.fitWidth,
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                Spacer(),
                 Stack(
                   alignment: Alignment.center,
                   children: [
@@ -306,8 +328,8 @@ class _GameScreenState extends State<GameScreen> {
               ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -335,7 +357,8 @@ class _GameScreenState extends State<GameScreen> {
     final shape =
         BalloonShape.values[random.nextInt(BalloonShape.values.length)];
     final color = allColors[random.nextInt(allColors.length)];
-    final hasCollector = random.nextInt(100) < 1; // 15% - коллекционный предмет
+    final hasCollector =
+        random.nextDouble() < 0.005; // 15% - коллекционный предмет
     // Начальная координата Y - за нижней границей
     final startY = 600.0;
 
@@ -359,7 +382,7 @@ class _GameScreenState extends State<GameScreen> {
       final toRemove = <String>[];
       for (final id in conveyorIds) {
         final b = allBalloons[id]!;
-        b.conveyorY -= 4; // скорость
+        b.conveyorY -= 3.5 * widget.difficalty; // скорость
         if (b.conveyorY < -100) {
           toRemove.add(id);
         }
@@ -450,6 +473,10 @@ class _GameScreenState extends State<GameScreen> {
     final bool containsCollector =
         placedBalloonIds.any((id) => allBalloons[id]!.hasCollectorItem);
     final bool isBoxFull = (boxGrid.filledCellsCount == boxGrid.totalCells);
+
+    if (containsCollector) {
+      collection.add(collections[random.nextInt(collections.length)].id);
+    }
 
     usedHolidays.add(selectedHoliday.name);
     giantPlacedCount++;
@@ -587,7 +614,9 @@ class _GameScreenState extends State<GameScreen> {
     return widgets;
   }
 
-  /// Виджет шара, который уже лежит в коробке
+  
+  
+
   Widget _buildBoxBalloonWidget(Balloon balloon) {
     final bx = balloon.boxX ?? 0;
     final by = balloon.boxY ?? 0;
@@ -635,7 +664,7 @@ class _ConveyorBeltState extends State<ConveyorBelt>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
-  double offset = 0;
+  final double textureHeight = 50; // Высота текстуры
 
   @override
   void initState() {
@@ -643,15 +672,11 @@ class _ConveyorBeltState extends State<ConveyorBelt>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2), // Скорость прокрутки
+      duration: const Duration(seconds: 2), // Скорость движения
     )..repeat();
 
-    _animation = Tween<double>(begin: 0, end: 1).animate(_controller)
-      ..addListener(() {
-        setState(() {
-          offset -= 2; // Скорость движения
-        });
-      });
+    _animation =
+        Tween<double>(begin: 0, end: textureHeight).animate(_controller);
   }
 
   @override
@@ -668,14 +693,29 @@ class _ConveyorBeltState extends State<ConveyorBelt>
           child: AnimatedBuilder(
             animation: _animation,
             builder: (context, child) {
-              return Transform.translate(
-                offset: Offset(0, offset % 50), // Двигаем текстуру конвейера
-                child: Image.asset(
-                  IconProvider.roll
-                      .buildImageUrl(), // Заменить на текстуру конвейера
-                  repeat: ImageRepeat.repeatY,
-                  fit: BoxFit.cover,
-                ),
+              return Stack(
+                children: [
+                  Positioned(
+                    top: _animation.value - textureHeight,
+                    left: 0,
+                    right: 0,
+                    child: Image.asset(
+                      IconProvider.roll.buildImageUrl(), // Текстура конвейера
+                      repeat: ImageRepeat.repeatY,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Positioned(
+                    top: _animation.value,
+                    left: 0,
+                    right: 0,
+                    child: Image.asset(
+                      IconProvider.roll.buildImageUrl(), // Копия текстуры
+                      repeat: ImageRepeat.repeatY,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
               );
             },
           ),

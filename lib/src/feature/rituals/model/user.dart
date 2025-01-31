@@ -19,6 +19,7 @@ class User {
   });
 
   User copyWith({
+    int? coins,
     int? hints,
     List<int>? achievements,
     int? puzzlesSolved,

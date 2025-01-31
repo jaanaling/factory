@@ -33,7 +33,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Align(
                     alignment: Alignment.centerLeft,
-                    child: CoinsContainer(coinsCount: 10)),
+                    child: CoinsContainer(coinsCount: state.user.coins)),
                 AppIcon(
                   asset: IconProvider.logoHome.buildImageUrl(),
                   width: getWidth(context, percent: 1),
@@ -69,7 +69,7 @@ class HomeScreen extends StatelessWidget {
                           fit: BoxFit.scaleDown,
                           alignment: Alignment.center,
                           child: Text(
-                            '1000',
+                            state.user.record.toString(),
                             style: TextStyle(fontSize: 32),
                           )),
                     )
@@ -86,12 +86,18 @@ class HomeScreen extends StatelessWidget {
                 ),
                 Gap(8),
                 AppButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.push(
+                        '${RouteValue.home.path}/${RouteValue.achievements.path}');
+                  },
                   title: 'ACHIEVEMENTS',
                 ),
                 Gap(8),
                 AppButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.push(
+                        '${RouteValue.home.path}/${RouteValue.collection.path}');
+                  },
                   title: 'COLLECTION',
                 ),
                 Spacer(),

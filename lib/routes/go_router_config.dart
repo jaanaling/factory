@@ -14,8 +14,7 @@ import 'route_value.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _homeNavigatorKey = GlobalKey<NavigatorState>();
-final _articlesNavigatorKey = GlobalKey<NavigatorState>();
-final _achievementsNavigatorKey = GlobalKey<NavigatorState>();
+
 
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -44,43 +43,35 @@ GoRouter buildGoRouter = GoRouter(
                 GoRoute(
                     path: RouteValue.select.path,
                     builder: (BuildContext context, GoRouterState state) {
-        
                       return LevelsScreen();
                     },
                     routes: [
                       GoRoute(
                         path: RouteValue.game.path,
                         builder: (BuildContext context, GoRouterState state) {
-                          return GameScreen();
+                          return GameScreen(
+                            difficalty: state.extra as int,
+                          );
                         },
                       ),
                     ]),
-              ],
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          navigatorKey: _articlesNavigatorKey,
-          routes: <RouteBase>[
-            GoRoute(
+                     GoRoute(
               path: RouteValue.collection.path,
               builder: (BuildContext context, GoRouterState state) {
                 return CollectionScreen();
               },
             ),
-          ],
-        ),
-        StatefulShellBranch(
-          navigatorKey: _achievementsNavigatorKey,
-          routes: <RouteBase>[
             GoRoute(
               path: RouteValue.achievements.path,
               builder: (BuildContext context, GoRouterState state) {
                 return const AchievementScreen();
               },
             ),
+              ],
+            ),
           ],
         ),
+       
       ],
     ),
     ShellRoute(

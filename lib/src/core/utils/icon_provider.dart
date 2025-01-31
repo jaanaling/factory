@@ -30,6 +30,7 @@ enum IconProvider {
   machuPicchu(imageName: 'machuPicchu.png'),
   roll(imageName: "roll.png"),
   notice(imageName: "notice.png"),
+  list(imageName: "list.png"),
   b1(imageName: 'b1.png'),
   b2(imageName: 'b2.png'),
   b3(imageName: 'b3.png'),

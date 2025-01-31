@@ -6,20 +6,18 @@ enum RouteValue {
     path: '/home',
   ),
   collection(
-    path: '/collection',
+    path: 'collection',
   ),
   select(
     path: 'select',
   ),
-  initial(
-    path: 'initial',
-  ),
+
   game(
     path: 'game',
   ),
 
   achievements(
-    path: '/achievements',
+    path: 'achievements',
   ),
 
   unknown(
