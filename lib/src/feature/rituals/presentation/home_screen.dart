@@ -3,6 +3,8 @@ import 'package:balloon_puzzle_factory/src/core/utils/app_icon.dart';
 import 'package:balloon_puzzle_factory/src/core/utils/icon_provider.dart';
 import 'package:balloon_puzzle_factory/src/core/utils/size_utils.dart';
 import 'package:balloon_puzzle_factory/src/feature/rituals/bloc/user_bloc.dart';
+import 'package:balloon_puzzle_factory/ui_kit/alert_dialog.dart';
+import 'package:balloon_puzzle_factory/ui_kit/animated_button.dart';
 import 'package:balloon_puzzle_factory/ui_kit/app_button.dart';
 import 'package:balloon_puzzle_factory/ui_kit/coins_container.dart';
 import 'package:balloon_puzzle_factory/ui_kit/gradient_text.dart';
@@ -119,12 +121,17 @@ class HomeScreen extends StatelessWidget {
                           color: const Color(0xFFC30E14),
                         ),
                         Gap(2),
-                        CoinsContainer(
-                          coinsCount: 10,
-                          text: '+ 10',
-                          width: 186,
-                          paddingSize: 0,
-                          fontSize: 16,
+                        AnimatedButton(
+                          onPressed: () {
+
+                          },
+                          child: CoinsContainer(
+                            coinsCount: 10,
+                            text: '+ 10',
+                            width: 186,
+                            paddingSize: 0,
+                            fontSize: 16,
+                          ),
                         )
                       ],
                     ),
