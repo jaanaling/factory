@@ -107,125 +107,202 @@ class _GameScreenState extends State<GameScreen> {
     // Собираем шары, которые сейчас в коробке
     final boxBalloons = allBalloons.values.where((b) => b.isInBox).toList();
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(onPressed: () => Navigator.pop(context)),
-        centerTitle: true,
-        title: Text("Time: $timeLeft"),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Score", style: TextStyle(fontSize: 14)),
-                Text(score.toString(), style: const TextStyle(fontSize: 16)),
-              ],
-            ),
-          ),
-        ],
-      ),
-      body: Row(
+    return SafeArea(
+      child: Stack(
         children: [
-          // Левая часть - конвейер
-          SizedBox(
-            width: 70,
-            child: Stack(
-              children: [
-                ConveyorBelt(),
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: conveyorIds.map((id) {
-                    final b = allBalloons[id]!;
-                    return Positioned(
-                      left: 15, // центр
-                      bottom: b.conveyorY,
-                      child: _buildConveyorBalloonWidget(b),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-          ),
-
-          // Правая часть - коробка + кнопки
-          Expanded(
-            child: Column(
-              children: [
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          Row(
+            children: [
+              // Левая часть - конвейер
+              SizedBox(
+                width: 70,
+                child: Stack(
                   children: [
-                    Container(
-                      width: 120,
-                      height: getHeight(context, percent: 0.12),
-                      color: Colors.amber,
-                      ),
+                    ConveyorBelt(),
                     Stack(
-                      alignment: Alignment.center,
-                      children: [
-                    
-                      AppIcon(asset: IconProvider.papper.buildImageUrl(), height: getHeight(context, percent: 0.12),),
-                                  
-                      Text(
-                        "${selectedHoliday.name}",
-                        style: const TextStyle(
-                            fontSize: 20, fontFamily: "Shadows Into Light", color: Colors.black),
-                      ),
-                    ]),
+                      clipBehavior: Clip.none,
+                      children: conveyorIds.map((id) {
+                        final b = allBalloons[id]!;
+                        return Positioned(
+                          left: 15, // центр
+                          bottom: b.conveyorY,
+                          child: _buildConveyorBalloonWidget(b),
+                        );
+                      }).toList(),
+                    ),
                   ],
                 ),
-                Expanded(
-                  child: Container(
-                    width: boxPxWidth,
-                    height: boxPxHeight,
-                    child: Stack(
-                      alignment: Alignment.center,
+              ),
+
+              // Правая часть - коробка + кнопки
+              Expanded(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        AppIcon(asset: IconProvider.box.buildImageUrl()),
-                        // Слой DragTargets (каждая клетка)
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: cellSize / 1.1, top: cellSize / 4),
-                          child: SizedBox(
-                            width: gridPxWidth,
-                            height: gridPxHeight,
-                            child: Stack(
-                              children: [..._buildBoxCellTargets()],
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            AppIcon(
+                              asset: IconProvider.buttonA.buildImageUrl(),
+                              width: getWidth(
+                                context,
+                                baseSize: 240,
+                              ),
+                              fit: BoxFit.fitWidth,
                             ),
-                          ),
+                            SizedBox(
+                              width: getWidth(
+                                    context,
+                                    baseSize: 240,
+                                  ) -
+                                  getWidth(
+                                    context,
+                                    baseSize: 83,
+                                  ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(timeLeft.toString()),
+                                  AppIcon(
+                                    asset: IconProvider.timer.buildImageUrl(),
+                                    width: getWidth(
+                                      context,
+                                      baseSize: 44,
+                                    ),
+                                    fit: BoxFit.fitWidth,
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: cellSize / 1.1, top: cellSize / 4),
-                          child: SizedBox(
-                            width: gridPxWidth,
-                            height: gridPxHeight,
-                            child: Stack(
-                              children: [
-                                ...boxBalloons
-                                    .map((b) => _buildBoxBalloonWidget(b))
-                              ],
-                            ),
+                        Stack(alignment: Alignment.center, children: [
+                          AppIcon(
+                            asset: IconProvider.papper.buildImageUrl(),
+                            height: getHeight(context, percent: 0.12),
                           ),
-                        ),
-                        // Слой шары
+                          Text(
+                            "${selectedHoliday.name}",
+                            style: const TextStyle(
+                                fontSize: 20,
+                                fontFamily: "Shadows Into Light",
+                                color: Colors.black),
+                          ),
+                        ]),
                       ],
                     ),
+                    Expanded(
+                      child: Container(
+                        width: boxPxWidth,
+                        height: boxPxHeight,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            AppIcon(asset: IconProvider.box.buildImageUrl()),
+                            // Слой DragTargets (каждая клетка)
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: cellSize / 1.1, top: cellSize / 4),
+                              child: SizedBox(
+                                width: gridPxWidth,
+                                height: gridPxHeight,
+                                child: Stack(
+                                  children: [..._buildBoxCellTargets()],
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: cellSize / 1.1, top: cellSize / 4),
+                              child: SizedBox(
+                                width: gridPxWidth,
+                                height: gridPxHeight,
+                                child: Stack(
+                                  children: [
+                                    ...boxBalloons
+                                        .map((b) => _buildBoxBalloonWidget(b))
+                                  ],
+                                ),
+                              ),
+                            ),
+                            // Слой шары
+                          ],
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: _onSend,
+                      child: const Text("Send"),
+                    ),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Кнопка "Notes" или что-то ещё
+                      },
+                      child: const Text("Notes"),
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+                ),
+              ),
+            ],
+          ),
+           Align(
+             alignment: Alignment.bottomRight,
+             child: AppIcon(
+                    asset: IconProvider.notice.buildImageUrl(),
+                    width: getWidth(
+                      context,
+                      baseSize: 486,
+                    ),
+                    fit: BoxFit.fitWidth,
                   ),
+           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AppIcon(
+                  asset: IconProvider.back.buildImageUrl(),
+                  width: getWidth(
+                    context,
+                    baseSize: 103,
+                  ),
+                  fit: BoxFit.fitWidth,
                 ),
-                ElevatedButton(
-                  onPressed: _onSend,
-                  child: const Text("Send"),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    AppIcon(
+                      asset: IconProvider.buttonA.buildImageUrl(),
+                      width: getWidth(
+                        context,
+                        baseSize: 240,
+                      ),
+                      fit: BoxFit.fitWidth,
+                    ),
+                    SizedBox(
+                      width: getWidth(
+                            context,
+                            baseSize: 240,
+                          ) -
+                          getWidth(
+                            context,
+                            baseSize: 83,
+                          ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(score.toString()),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    // Кнопка "Notes" или что-то ещё
-                  },
-                  child: const Text("Notes"),
-                ),
-                const SizedBox(height: 10),
               ],
             ),
           ),

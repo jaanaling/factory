@@ -10,7 +10,8 @@ enum IconProvider {
   backgroundC(imageName: 'background_3.webp'),
   box(imageName: 'box.png'),
   papper(imageName: 'papper.png'),
-
+  timer(imageName: 'timer.png'),
+  back(imageName: "back.png"),
   eiffelTower(imageName: 'eiffelTower.svg'),
   bigBen(imageName: 'bigBen.svg'),
   statueOfLiberty(imageName: 'statueOfLiberty.svg'),
@@ -22,6 +23,7 @@ enum IconProvider {
   greatPyramidOfGiza(imageName: 'greatPyramidOfGiza.png'),
   machuPicchu(imageName: 'machuPicchu.png'),
   roll(imageName: "roll.png"),
+  notice(imageName: "notice.png"),
   b1(imageName: 'b1.png'),
   b2(imageName: 'b2.png'),
   b3(imageName: 'b3.png'),
