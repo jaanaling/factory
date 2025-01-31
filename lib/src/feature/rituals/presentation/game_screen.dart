@@ -9,6 +9,7 @@ import 'package:balloon_puzzle_factory/src/feature/rituals/model/collection.dart
 import 'package:balloon_puzzle_factory/src/feature/rituals/model/grid.dart';
 import 'package:balloon_puzzle_factory/src/feature/rituals/model/holiday.dart';
 import 'package:balloon_puzzle_factory/src/feature/rituals/utils/logic.dart';
+import 'package:balloon_puzzle_factory/ui_kit/animated_button.dart';
 import 'package:balloon_puzzle_factory/ui_kit/app_button.dart';
 import 'package:balloon_puzzle_factory/ui_kit/sound_button.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +28,9 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  final int gridWidth = 6;
-  final int gridHeight = 9;
+  final int gridWidth = 4;
+  final int gridHeight = 6;
   final Set<int> collection = {};
-
 
   late double cellSize; // пиксельный размер одной ячейки
 
@@ -89,7 +89,8 @@ class _GameScreenState extends State<GameScreen> {
     });
 
     // Периодически добавляем шары на конвейер (каждые 2 секунды)
-    Timer.periodic( Duration(microseconds: 2000000 ~/ 3 * widget.difficalty), (t) {
+    Timer.periodic(Duration(microseconds: 500000 ~/ 3 * widget.difficalty),
+        (t) {
       if (timeLeft <= 0) {
         t.cancel();
       } else {
@@ -110,7 +111,7 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    cellSize = getWidth(context, percent: 0.067);
+    cellSize = getWidth(context, percent: 0.1);
     final boxPxWidth = gridWidth * cellSize * 3;
     final boxPxHeight = gridHeight * cellSize * (1 / 3);
     final gridPxWidth = gridWidth * cellSize;
@@ -126,6 +127,7 @@ class _GameScreenState extends State<GameScreen> {
             // Левая часть - конвейер
             SizedBox(
               width: 70,
+              height: double.infinity,
               child: Stack(
                 children: [
                   ConveyorBelt(),
@@ -561,6 +563,7 @@ class _GameScreenState extends State<GameScreen> {
   /// Генерируем набор DragTarget для каждой клетки коробки
   List<Widget> _buildBoxCellTargets() {
     final widgets = <Widget>[];
+
     for (int y = 0; y < gridHeight; y++) {
       for (int x = 0; x < gridWidth; x++) {
         final cell = boxGrid.cellAt(x, y)!;
@@ -570,13 +573,32 @@ class _GameScreenState extends State<GameScreen> {
             top: y * cellSize,
             child: DragTarget<Balloon>(
               builder: (context, candidate, rejected) {
+                bool isValidPlacement = false;
+                Color highlightColor = Colors.transparent;
+
+                if (candidate.isNotEmpty) {
+                  final incoming = candidate.first;
+
+                  if (incoming != null) {
+                    // Получаем размер шара
+                    final sz = getBalloonGridSize(incoming.shape);
+                    final w = sz.width.toInt();
+                    final h = sz.height.toInt();
+
+                    // Подсвечиваем все клетки, которые будут заняты шаром
+                    isValidPlacement = _canPlaceBalloon(incoming, x, y, w, h);
+                    // Если клетка занята или выходит за пределы, подсвечиваем её красным
+                    highlightColor = isValidPlacement
+                        ? Colors.green.withOpacity(0.3)
+                        : Colors.red.withOpacity(0.5);
+                  }
+                }
+
                 return Container(
                   width: cellSize,
                   height: cellSize,
                   decoration: BoxDecoration(
-                    color: cell.isBooster
-                        ? Colors.lightGreenAccent.withOpacity(0.2)
-                        : Colors.transparent,
+                    color: highlightColor,
                     border:
                         Border.all(color: const Color.fromARGB(108, 0, 0, 0)),
                   ),
@@ -584,14 +606,12 @@ class _GameScreenState extends State<GameScreen> {
               },
               onWillAccept: (incoming) {
                 if (incoming == null) return false;
-                // Убираем шар из старых ячеек (если он там был)
-                boxGrid.remove(incoming.id);
 
                 final sz = getBalloonGridSize(incoming.shape);
                 final w = sz.width.toInt();
                 final h = sz.height.toInt();
-                final can = boxGrid.canPlace(incoming.id, x, y, w, h);
-                return can;
+                // Подсвечиваем область, которую будет занимать шар
+                return _canPlaceBalloon(incoming, x, y, w, h);
               },
               onAccept: (incoming) {
                 final sz = getBalloonGridSize(incoming.shape);
@@ -601,7 +621,6 @@ class _GameScreenState extends State<GameScreen> {
                 if (placed) {
                   incoming.boxX = x;
                   incoming.boxY = y;
-                  // Удаляем шар из конвейера
                   conveyorIds.remove(incoming.id);
                   setState(() {});
                 }
@@ -614,8 +633,22 @@ class _GameScreenState extends State<GameScreen> {
     return widgets;
   }
 
-  
-  
+// Проверка, можно ли установить шар в указанных клетках (с учетом размера)
+  bool _canPlaceBalloon(
+      Balloon balloon, int startX, int startY, int width, int height) {
+    // Проверка всех клеток, которые будет занимать шар
+    for (int y = startY; y < startY + height; y++) {
+      for (int x = startX; x < startX + width; x++) {
+        // Проверка на выход за границы поля и занятость клетки
+        if (x >= gridWidth ||
+            y >= gridHeight ||
+            boxGrid.cellAt(x, y)!.balloonId != null) {
+          return false; // Если выходим за пределы поля или клетка уже занята, нельзя установить
+        }
+      }
+    }
+    return true;
+  }
 
   Widget _buildBoxBalloonWidget(Balloon balloon) {
     final bx = balloon.boxX ?? 0;
@@ -636,7 +669,7 @@ class _GameScreenState extends State<GameScreen> {
           color: Colors.transparent,
         ),
         onDragStarted: () {
-          // Убираем шар из клеток, чтобы освободить место
+          // Запоминаем клетку, из которой был схвачен шар
           boxGrid.remove(balloon.id);
           setState(() {});
         },
@@ -723,4 +756,74 @@ class _ConveyorBeltState extends State<ConveyorBelt>
       ],
     );
   }
+}
+
+void showADialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      int curIndex = 0;
+      List<List<HolidayCondition>> holidayCondition = [
+        [
+          holidayConditions[0],
+          holidayConditions[1],
+          holidayConditions[2],
+        ],
+        [
+          holidayConditions[3],
+          holidayConditions[4],
+          holidayConditions[5],
+        ],
+        [
+          holidayConditions[6],
+          holidayConditions[7],
+          holidayConditions[8],
+        ],
+        [
+          holidayConditions[9],
+        ],
+      ];
+
+      return AlertDialog(
+        contentPadding: EdgeInsets.zero,
+        backgroundColor: Colors.transparent,
+        content: Stack(
+          alignment: Alignment.center,
+          children: [
+            AppIcon(
+              asset: IconProvider.list.buildImageUrl(),
+              width: getWidth(context, baseSize: 887),
+              fit: BoxFit.fitWidth,
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: AnimatedButton(
+                child: AppIcon(
+                  asset: IconProvider.close.buildImageUrl(),
+                  width: getWidth(context, baseSize: 163),
+                  fit: BoxFit.fitWidth,
+                ),
+                onPressed: () {
+                  context.pop();
+                },
+              ),
+            ),
+            Column(
+                children: List.generate(holidayCondition.length, (index) {
+              return Column(
+                children:
+                    List.generate(holidayCondition[index].length, (index2) {
+                  return AppButton(
+                    onPressed: () {},
+                    title: holidayCondition[index][index2].name,
+                  );
+                }),
+              );
+            }))
+          ],
+        ),
+      );
+    },
+  );
 }
