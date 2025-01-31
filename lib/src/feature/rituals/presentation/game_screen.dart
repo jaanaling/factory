@@ -249,13 +249,18 @@ class _GameScreenState extends State<GameScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppIcon(
-                  asset: IconProvider.back.buildImageUrl(),
-                  width: getWidth(
-                    context,
-                    baseSize: 103,
+                AnimatedButton(
+                  onPressed: () {
+                    context.pop();
+                  },
+                  child: AppIcon(
+                    asset: IconProvider.back.buildImageUrl(),
+                    width: getWidth(
+                      context,
+                      baseSize: 103,
+                    ),
+                    fit: BoxFit.fitWidth,
                   ),
-                  fit: BoxFit.fitWidth,
                 ),
                 Spacer(
                   flex: 2,
@@ -540,7 +545,6 @@ class _GameScreenState extends State<GameScreen> {
         asset: asset,
         width: 40,
         height: 40,
-        blendMode: BlendMode.modulate,
         color: balloon.color,
       );
     } else {
@@ -553,7 +557,6 @@ class _GameScreenState extends State<GameScreen> {
           asset: asset,
           width: w,
           height: h,
-          blendMode: BlendMode.modulate,
           color: balloon.color,
         ),
       );

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AppIcon extends StatelessWidget {
@@ -9,7 +10,6 @@ class AppIcon extends StatelessWidget {
   final double? width;
   final double? height;
   final BoxFit fit;
-  final BlendMode? blendMode;
 
   const AppIcon({
     super.key,
@@ -18,7 +18,6 @@ class AppIcon extends StatelessWidget {
     this.width,
     this.height,
     this.fit = BoxFit.contain,
-    this.blendMode,
   });
 
   @override
@@ -34,23 +33,26 @@ class AppIcon extends StatelessWidget {
               height: height,
               fit: fit,
               allowDrawingOutsideViewBox: true,
-              colorFilter: color != null
-                  ? ColorFilter.mode(
-                      color!,
-                      blendMode ?? BlendMode.srcIn,
-                    )
-                  : null,
+              colorFilter: color != null ? colorFilterFromColor(color!) : null,
             ),
           )
-        : asset.contains("assets")
-            ? Image.asset(
-                asset,
-                width: width,
-                height: height,
-                fit: fit,
-                color: color,
-                colorBlendMode: color != null ? blendMode?? BlendMode.srcIn : null,
-              )
+        : asset.contains('assets')
+            ? color != null
+                ? ColorFiltered(
+                    colorFilter: colorFilterFromColor(color!),
+                    child: Image.asset(
+                      asset,
+                      width: width,
+                      height: height,
+                      fit: fit,
+                    ),
+                  )
+                : Image.asset(
+                    asset,
+                    width: width,
+                    height: height,
+                    fit: fit,
+                  )
             : Image.file(
                 File(asset),
                 width: width,
@@ -58,4 +60,29 @@ class AppIcon extends StatelessWidget {
                 fit: fit,
               );
   }
+}
+
+ColorFilter colorFilterFromColor(Color color) {
+  return ColorFilter.matrix([
+    color.red / 255,
+    0,
+    0,
+    0,
+    0,
+    0,
+    color.green / 255,
+    0,
+    0,
+    0,
+    0,
+    0,
+    color.blue / 255,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+  ]);
 }
