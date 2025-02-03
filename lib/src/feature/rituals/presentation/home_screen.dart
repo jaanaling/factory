@@ -56,12 +56,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 AppIcon(
                   asset: IconProvider.logoHome.buildImageUrl(),
-                  width: getWidth(context, percent: 1),
+                  width:isIpad(context)? getWidth(context, percent: 0.7): getWidth(context, percent: 1),
                   fit: BoxFit.fitWidth,
                 ),
                 AppIcon(
                   asset: 'assets/images/YOUR RECORD!.webp',
-                  width: getWidth(context, baseSize: 693),
+                  width: getWidth(context, baseSize:isIpad(context)? 500: 693),
                   fit: BoxFit.fitWidth,
                 ),
                 Gap(10),
@@ -72,14 +72,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       asset: IconProvider.buttonA.buildImageUrl(),
                       width: getWidth(
                         context,
-                        baseSize: 371,
+                        baseSize: isIpad(context)?180: 371,
                       ),
                       fit: BoxFit.fitWidth,
                     ),
                     SizedBox(
                       width: getWidth(
                             context,
-                            baseSize: 371,
+                            baseSize: isIpad(context)?180: 371,
                           ) -
                           getWidth(
                             context,
@@ -129,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         AppIcon(
                           asset: IconProvider.gift.buildImageUrl(),
-                          width: getWidth(context, baseSize: 298),
+                          width: getWidth(context, baseSize: isIpad(context)? 200: 298),
                           fit: BoxFit.fitWidth,
                         ),
                         TextWithBorder(
@@ -139,17 +139,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: const Color(0xFFC30E14),
                         ),
                         Gap(2),
-                        AnimatedButton(
-                          onPressed: () {
-
-                          },
-                          child: CoinsContainer(
-                            coinsCount: 10,
-                            text: '+ 10',
-                            width: 186,
-                            paddingSize: 0,
-                            fontSize: 16,
-                          ),
+                        CoinsContainer(
+                          coinsCount: 10,
+                          text: '+ 10',
+                          width: 186,
+                          paddingSize: 0,
+                          fontSize: 16,
                         )
                       ],
                     ),
@@ -158,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         AppIcon(
                           asset: IconProvider.giftGrey.buildImageUrl(),
-                          width: getWidth(context, baseSize: 298),
+                          width: getWidth(context, baseSize: isIpad(context)? 200: 298),
                           fit: BoxFit.fitWidth,
                         ),
                         TextWithBorder(
@@ -182,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         AppIcon(
                           asset: IconProvider.giftGrey.buildImageUrl(),
-                          width: getWidth(context, baseSize: 298),
+                          width: getWidth(context, baseSize: isIpad(context)? 200: 298),
                           fit: BoxFit.fitWidth,
                         ),
                         TextWithBorder(

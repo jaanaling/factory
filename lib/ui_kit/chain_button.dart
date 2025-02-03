@@ -23,7 +23,7 @@ class ChainButton extends StatelessWidget {
         children: [
           AppIcon(
             asset: IconProvider.buttonGrey.buildImageUrl(),
-            width: getWidth(context, baseSize: 830),
+            width: getWidth(context, baseSize: isIpad(context) ? 550 : 830),
             fit: BoxFit.fitWidth,
           ),
           TextWithBorder(
@@ -34,7 +34,7 @@ class ChainButton extends StatelessWidget {
           ),
           AppIcon(
             asset: IconProvider.chain.buildImageUrl(),
-            width: getWidth(context, baseSize: 830),
+            width: getWidth(context, baseSize: isIpad(context) ? 550 : 830),
             fit: BoxFit.fitWidth,
           ),
           Positioned(
@@ -68,7 +68,7 @@ void _showAlertDialog(BuildContext context, String factory) {
           children: [
             AppIcon(
               asset: IconProvider.alertDialog.buildImageUrl(),
-              width: getWidth(context, baseSize: 1024),
+              width: getWidth(context, baseSize: isIpad(context) ? 800 : 1024),
               fit: BoxFit.fitWidth,
             ),
             Positioned(
@@ -86,13 +86,13 @@ void _showAlertDialog(BuildContext context, String factory) {
               ),
             ),
             SizedBox(
-              width: getWidth(context, baseSize: 1024) -
-                  getWidth(context, baseSize: 406),
+              width: getWidth(context, baseSize: isIpad(context) ? 800 : 1024) -
+                  getWidth(context, baseSize: isIpad(context) ? 200 : 406),
               child: Text(
                 "You don't have enough coins to unlock the ${factory.toLowerCase()} factory!",
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Sabalon',
-                  fontSize: 26,
+                  fontSize: isIpad(context)? 42: 26,
                   color: Color(0xFFC30E14),
                 ),
               ),

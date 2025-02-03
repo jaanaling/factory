@@ -30,7 +30,7 @@ class AppButton extends StatelessWidget {
             asset: isGrey
                 ? IconProvider.buttonGrey.buildImageUrl()
                 : IconProvider.button.buildImageUrl(),
-            width: getWidth(context, baseSize: width),
+            width: getWidth(context, baseSize: isIpad(context)? width-280: width),
             fit: BoxFit.fitWidth,
           ),
           TextWithBorder(

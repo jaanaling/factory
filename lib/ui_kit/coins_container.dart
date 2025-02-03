@@ -27,14 +27,14 @@ class CoinsContainer extends StatelessWidget {
           asset: IconProvider.buttonA.buildImageUrl(),
           width: getWidth(
             context,
-            baseSize: 240,
+            baseSize: isIpad(context) ? 180 : 240,
           ),
           fit: BoxFit.fitWidth,
         ),
         SizedBox(
           width: getWidth(
                 context,
-                baseSize: width ?? 240,
+                baseSize: width ??(isIpad(context)?180: 240) ,
               ) -
               getWidth(
                 context,
@@ -45,7 +45,10 @@ class CoinsContainer extends StatelessWidget {
             children: [
               FittedBox(
                 fit: BoxFit.scaleDown,
-                child: Text(text ?? coinsCount.toString(), style: TextStyle(fontSize: fontSize),),
+                child: Text(
+                  text ?? coinsCount.toString(),
+                  style: TextStyle(fontSize:isIpad(context) ? 32 : fontSize),
+                ),
               ),
               AppIcon(
                 asset: IconProvider.coins.buildImageUrl(),

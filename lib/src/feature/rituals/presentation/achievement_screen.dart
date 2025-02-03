@@ -20,8 +20,8 @@ class AchievementScreen extends StatelessWidget {
     return BlocBuilder<UserBloc, UserState>(
       builder: (context, state) {
         if (state is UserLoaded) {
-          return SafeArea(
-            child: SingleChildScrollView(
+          return SingleChildScrollView(
+            child: SafeArea(
               child: Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: getHeight(context, baseSize: 18),
@@ -95,7 +95,7 @@ void showAlertDialog(BuildContext context, String title) {
           children: [
             AppIcon(
               asset: IconProvider.alertDialog.buildImageUrl(),
-              width: getWidth(context, baseSize: 1024),
+              width: getWidth(context, baseSize: isIpad(context)? 800: 1024),
               fit: BoxFit.fitWidth,
             ),
             Positioned(
@@ -113,13 +113,13 @@ void showAlertDialog(BuildContext context, String title) {
               ),
             ),
             SizedBox(
-              width: getWidth(context, baseSize: 1024) -
-                  getWidth(context, baseSize: 406),
+              width: getWidth(context, baseSize: isIpad(context)? 800: 1024) -
+                  getWidth(context, baseSize: isIpad(context)? 200: 406),
               child: Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Sabalon',
-                  fontSize: 26,
+                  fontSize: isIpad(context)? 42: 26,
                   color: Color(0xFFC30E14),
                 ),
               ),

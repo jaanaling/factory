@@ -17,39 +17,39 @@ class HolidayCondition {
 final List<HolidayCondition> holidayConditions = [
   HolidayCondition(
     name: "Birthday",
-    allowedColors: [Colors.red, Colors.yellow, Colors.orange, Colors.pink],
+    allowedColors: [Colors.red, Colors.yellow, Colors.orange, Color(0xFFF16FC7)],
     description: "Bright, cheerful colors for a birthday party.",
   ),
   HolidayCondition(
     name: "Wedding",
-    allowedColors: [Colors.white, Colors.pink, Colors.purple, gold],
+    allowedColors: [Color(0xFFFAEFC8), Color(0xFFF16FC7), Colors.purple, gold],
     description: "Light, festive colors (white, pink, purple, gold).",
   ),
   HolidayCondition(
     name: "Halloween",
-    allowedColors: [Colors.orange, Color(0xFF00101E), Colors.purple],
+    allowedColors: [Colors.orange, Color(0xFF041A2E), Colors.purple],
     description: "Traditional Halloween colors: orange, black, purple.",
   ),
   HolidayCondition(
     name: "Christmas",
-    allowedColors: [Colors.red, Colors.green, Colors.white, gold],
+    allowedColors: [Colors.red, Colors.green, Color(0xFFFAEFC8), gold],
     description: "Classic Christmas colors (red, green, white, gold).",
   ),
   HolidayCondition(
     name: "New Year",
-    allowedColors: [Colors.white, Colors.blue, silver, gold],
+    allowedColors: [Color(0xFFFAEFC8), Colors.blue, silver, gold],
     description: "Cold shades + silver and gold.",
   ),
   HolidayCondition(
     name: "Valentine's Day",
-    allowedColors: [Colors.red, Colors.pink, Colors.white],
+    allowedColors: [Colors.red, Color(0xFFF16FC7), Color(0xFFFAEFC8)],
     description: "Romantic red and pink tones to symbolize love.",
   ),
   HolidayCondition(
     name: "Easter",
     allowedColors: [
       Colors.yellow,
-      Colors.pink,
+      Color(0xFFF16FC7),
       Colors.lightGreen,
       Colors.purple
     ],
@@ -57,17 +57,17 @@ final List<HolidayCondition> holidayConditions = [
   ),
   HolidayCondition(
     name: "Oktoberfest",
-    allowedColors: [Colors.blue, Colors.white, Colors.brown],
+    allowedColors: [Colors.blue, Color(0xFFFAEFC8), Colors.brown],
     description: "Traditional beer holiday colors: blue, white, brown.",
   ),
   HolidayCondition(
     name: "St. Patrick's Day",
-    allowedColors: [Colors.green, Colors.orange, Colors.white],
+    allowedColors: [Colors.green, Colors.orange, Color(0xFFFAEFC8)],
     description: "The primary color is green, plus orange and white.",
   ),
   HolidayCondition(
     name: "Baby Shower",
-    allowedColors: [Colors.pink, Colors.lightBlue, Colors.white],
+    allowedColors: [Color(0xFFF16FC7), Colors.lightBlue, Color(0xFFFAEFC8)],
     description: "Gentle “baby” shades for a pre-baby shower.",
   ),
 ];

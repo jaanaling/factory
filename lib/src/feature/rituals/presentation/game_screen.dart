@@ -60,7 +60,6 @@ class _GameScreenState extends State<GameScreen> {
   void initState() {
     super.initState();
 
-  
     // Инициализируем сетку коробки
     boxGrid = BoxGrid(width: gridWidth, height: gridHeight);
 
@@ -75,12 +74,13 @@ class _GameScreenState extends State<GameScreen> {
         if (timeLeft <= 0) {
           final oldUser = (context.read<UserBloc>().state as UserLoaded).user;
           final newUser = oldUser.copyWith(
-            record: max(oldUser.record, score),
-            coins: oldUser.coins + (score > 0 ? score ~/ 100 : 0),
-          );
+              record: max(oldUser.record, score),
+              coins: oldUser.coins + (score > 0 ? score ~/ 100 : 0),
+              collection: collection.toList());
           context.read<UserBloc>().add(UserPuzzleSolved(user: newUser));
           t.cancel();
-          showEndAlertDialog(context, oldUser.record < score, score, widget.difficalty);
+          showEndAlertDialog(
+              context, oldUser.record < score, score, widget.difficalty);
         }
       });
     });
@@ -91,7 +91,7 @@ class _GameScreenState extends State<GameScreen> {
     });
 
     // Периодически добавляем шары на конвейер (каждые 2 секунды)
-    Timer.periodic(Duration(microseconds: 500000 ~/(0.5 * widget.difficalty)),
+    Timer.periodic(Duration(microseconds: 500000 ~/ (0.5 * widget.difficalty)),
         (t) {
       if (timeLeft <= 0) {
         t.cancel();
@@ -113,9 +113,10 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    cellSize = getWidth(context, percent: 0.1);
-    final boxPxWidth = gridWidth * cellSize * 3;
-    final boxPxHeight = gridHeight * cellSize * (1 / 3);
+    cellSize = getWidth(context, percent:isIpad(context) ? 0.086 : 0.1);
+    final boxPxWidth = gridWidth * cellSize * (isIpad(context) ? 6 : 3);
+    final boxPxHeight =
+        gridHeight * cellSize * (isIpad(context) ? 1 : (1 / 3));
     final gridPxWidth = gridWidth * cellSize;
     final gridPxHeight = gridHeight * cellSize;
 
@@ -128,8 +129,7 @@ class _GameScreenState extends State<GameScreen> {
           children: [
             // Левая часть - конвейер
             SizedBox(
-              width: 70,
-              height: double.infinity,
+              width: isIpad(context)?200: 70,
               child: Stack(
                 children: [
                   ConveyorBelt(),
@@ -138,7 +138,7 @@ class _GameScreenState extends State<GameScreen> {
                     children: conveyorIds.map((id) {
                       final b = allBalloons[id]!;
                       return Positioned(
-                        left: 15, // центр
+                        left: isIpad(context)?45:15, // центр
                         bottom: b.conveyorY,
                         child: _buildConveyorBalloonWidget(b),
                       );
@@ -169,11 +169,11 @@ class _GameScreenState extends State<GameScreen> {
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
-                            AppIcon(asset: IconProvider.box.buildImageUrl()),
+                            AppIcon(asset: IconProvider.box.buildImageUrl(), width: getWidth(context, percent: 1),),
                             // Слой DragTargets (каждая клетка)
                             Padding(
                               padding: EdgeInsets.only(
-                                left: cellSize / 1.7,
+                                left: cellSize /(isIpad(context)?2:1.7),
                                 top: cellSize / 4,
                               ),
                               child: SizedBox(
@@ -186,7 +186,7 @@ class _GameScreenState extends State<GameScreen> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                left: cellSize / 1.7,
+                                left: cellSize /(isIpad(context)?2:1.7) ,
                                 top: cellSize / 4,
                               ),
                               child: SizedBox(
@@ -363,16 +363,18 @@ class _GameScreenState extends State<GameScreen> {
         BalloonShape.values[random.nextInt(BalloonShape.values.length)];
     final color = allColors[random.nextInt(allColors.length)];
     final hasCollector =
-        random.nextDouble() < 0.01; // 15% - коллекционный предмет
+        random.nextDouble() < 0.05; // 15% - коллекционный предмет
     // Начальная координата Y - за нижней границей
-    final startY = 600.0;
+    final startY = 0;
 
     final balloon = Balloon(
       id: UniqueKey().toString(),
       color: color,
       shape: shape,
-      hasCollectorItem: hasCollector,
-      conveyorY: startY,
+      hasCollectorItem: hasCollector
+          ? collections[Random().nextInt(collections.length - 1)].id
+          : null,
+      conveyorY: getHeight(context, percent: 1),
     );
     allBalloons[balloon.id] = balloon;
 
@@ -447,7 +449,7 @@ class _GameScreenState extends State<GameScreen> {
         if (balloon != null) {
           // Проверяем цвет: если шар не входит в allowedColors => штраф
           if (!selectedHoliday.allowedColors.contains(balloon.color)) {
-            boxScore -= 5;
+            boxScore -= 1;
           }
           // Бустер
           if (cell.isBooster) {
@@ -460,7 +462,7 @@ class _GameScreenState extends State<GameScreen> {
     // Бонус за коллекционный предмет
     for (final id in placedIds) {
       final b = allBalloons[id];
-      if (b != null && b.hasCollectorItem) {
+      if (b != null && b.hasCollectorItem != null) {
         boxScore += 10;
       }
     }
@@ -476,11 +478,13 @@ class _GameScreenState extends State<GameScreen> {
 
     // Пример вычисления:
     final bool containsCollector =
-        placedBalloonIds.any((id) => allBalloons[id]!.hasCollectorItem);
+        placedBalloonIds.any((id) => allBalloons[id]!.hasCollectorItem != null);
     final bool isBoxFull = (boxGrid.filledCellsCount == boxGrid.totalCells);
 
-    if (containsCollector) {
-      collection.add(collections[random.nextInt(collections.length)].id);
+    for (var action in allBalloons.values.where((b) => b.isInBox).toList()) {
+      if (action.hasCollectorItem != null) {
+        collection.add(collections[action.hasCollectorItem!].id);
+      }
     }
 
     usedHolidays.add(selectedHoliday.name);
@@ -544,8 +548,8 @@ class _GameScreenState extends State<GameScreen> {
     if (forConveyor) {
       return AppIcon(
         asset: asset,
-        width: 40,
-        height: 40,
+        width:isIpad(context)?120: 40,
+        height: isIpad(context)?120:40,
         color: balloon.color,
       );
     } else {
@@ -554,11 +558,25 @@ class _GameScreenState extends State<GameScreen> {
       final h = size.height * cellSize;
       return Opacity(
         opacity: isDragging ? 0.8 : 1.0,
-        child: AppIcon(
-          asset: asset,
-          width: w,
-          height: h,
-          color: balloon.color,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            AppIcon(
+              asset: asset,
+              width: w,
+              height: h,
+              color: balloon.color,
+            ),
+            if (balloon.hasCollectorItem != null)
+              Opacity(
+                opacity: 0.7,
+                child: AppIcon(
+                  asset: collections[balloon.hasCollectorItem!].image,
+                  width: w - (isIpad(context)?40:10),
+                  height: h - (isIpad(context)?40:10),
+                ),
+              ),
+          ],
         ),
       );
     }
@@ -749,7 +767,7 @@ class _ConveyorBeltState extends State<ConveyorBelt>
                     child: Image.asset(
                       IconProvider.roll.buildImageUrl(), // Текстура конвейера
                       repeat: ImageRepeat.repeatY,
-                      fit: BoxFit.cover,
+                      height: getHeight(context, percent: 1.2),
                     ),
                   ),
                   Positioned(
@@ -759,7 +777,7 @@ class _ConveyorBeltState extends State<ConveyorBelt>
                     child: Image.asset(
                       IconProvider.roll.buildImageUrl(), // Копия текстуры
                       repeat: ImageRepeat.repeatY,
-                      fit: BoxFit.cover,
+                      height: getHeight(context, percent: 1.2),
                     ),
                   ),
                 ],
@@ -802,13 +820,13 @@ void showAADialog(BuildContext context) {
       return StatefulBuilder(
         builder: (context, setState) {
           return SizedBox(
-            width: getWidth(context, baseSize: 887),
+            width: getWidth(context, baseSize: isIpad(context)?750: 887),
             height: getHeight(context, baseSize: 500),
             child: AlertDialog(
               contentPadding: EdgeInsets.zero,
               backgroundColor: Colors.transparent,
               content: SizedBox(
-                width: getWidth(context, baseSize: 887),
+                width: getWidth(context, baseSize: isIpad(context)?750: 887),
                 height: getHeight(context, baseSize: 1400),
                 child: Stack(
                   alignment: Alignment.center,
@@ -839,17 +857,50 @@ void showAADialog(BuildContext context) {
                       ),
                     ),
                     if (openIndex == null)
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: List.generate(
-                            holidayCondition[curIndex].length, (index2) {
-                          return AnimatedButton(
-                            onPressed: () {
-                              setState(() {
-                                openIndex = index2;
-                              });
-                            },
-                            child: Container(
+                      Padding(
+                        padding: EdgeInsets.only(left: isIpad(context)?70:0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: List.generate(
+                              holidayCondition[curIndex].length, (index2) {
+                            return AnimatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  openIndex = index2;
+                                });
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: getWidth(context, baseSize: 505),
+                                height: getHeight(context, baseSize: 203),
+                                decoration: ShapeDecoration(
+                                  color: Color(0xFFE2E0DE),
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        width: 3, color: Color(0xFFDE9F20)),
+                                    borderRadius: BorderRadius.circular(13),
+                                  ),
+                                ),
+                                child: Text(
+                                  holidayCondition[curIndex][index2].name,
+                                  style: TextStyle(
+                                    fontSize: isIpad(context)?30: 20,
+                                    fontFamily: "Shadows Into Light",
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                      )
+                    else
+                      Padding(
+                        padding: EdgeInsets.only(left: isIpad(context)?70:0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Container(
                               alignment: Alignment.center,
                               width: getWidth(context, baseSize: 505),
                               height: getHeight(context, baseSize: 203),
@@ -862,55 +913,28 @@ void showAADialog(BuildContext context) {
                                 ),
                               ),
                               child: Text(
-                                holidayCondition[curIndex][index2].name,
-                                style: const TextStyle(
-                                  fontSize: 20,
+                                holidayCondition[curIndex][openIndex!].name,
+                                style: TextStyle(
+                                  fontSize: isIpad(context)?30: 20,
                                   fontFamily: "Shadows Into Light",
                                   color: Colors.black,
                                 ),
                               ),
                             ),
-                          );
-                        }),
-                      )
-                    else
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Container(
-                            alignment: Alignment.center,
-                            width: getWidth(context, baseSize: 505),
-                            height: getHeight(context, baseSize: 203),
-                            decoration: ShapeDecoration(
-                              color: Color(0xFFE2E0DE),
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                    width: 3, color: Color(0xFFDE9F20)),
-                                borderRadius: BorderRadius.circular(13),
+                            SizedBox(
+                              width: getWidth(context, baseSize: 505),
+                              child: Text(
+                                holidayCondition[curIndex][openIndex!]
+                                    .description,
+                                style: TextStyle(
+                                  fontSize: isIpad(context)?30: 20,
+                                  fontFamily: "Shadows Into Light",
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
-                            child: Text(
-                              holidayCondition[curIndex][openIndex!].name,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontFamily: "Shadows Into Light",
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: getWidth(context, baseSize: 505),
-                            child: Text(
-                              holidayCondition[curIndex][openIndex!]
-                                  .description,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontFamily: "Shadows Into Light",
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

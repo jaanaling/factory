@@ -1,9 +1,9 @@
+import 'package:advertising_id/advertising_id.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-
 
 import '../../../../../routes/route_value.dart';
 import '../../../../core/utils/app_icon.dart';
@@ -26,6 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> startLoading(BuildContext context) async {
     await Future.delayed(const Duration(milliseconds: 1000));
+    final advertisingId = await AdvertisingId.id(true);
     context.go(RouteValue.home.path);
   }
 
@@ -54,12 +55,10 @@ class _SplashScreenState extends State<SplashScreen> {
             fit: BoxFit.fitWidth,
           ),
         ),
-       Positioned(
+        Positioned(
           bottom: getHeight(context, baseSize: 51),
           child: LoadingAnimationWidget.hexagonDots(
-            color: Color(0xFFFF5711),
-            size: 120
-          ),
+              color: Color(0xFFFF5711), size: 120),
         )
       ],
     );

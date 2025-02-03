@@ -7,7 +7,7 @@ class Balloon {
   final String id;
   final Color color;
   final BalloonShape shape;
-  final bool hasCollectorItem;
+  final int? hasCollectorItem;
 
   // Положение на конвейере (bottom:Y). Двигаем вверх.
   double conveyorY;
@@ -90,10 +90,10 @@ final List<Color> allColors = [
   Colors.blue,
   Colors.green,
   Colors.purple,
-  Colors.pink,
+  Color(0xFFF16FC7),
   Colors.cyan,
-  Colors.white,
-  Color(0xFF00101E),
+  Color(0xFFFAEFC8),
+  Color(0xFF041A2E),
   gold,
   silver,
   Colors.brown,

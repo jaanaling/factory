@@ -41,7 +41,7 @@ class _SoundButtonState extends State<SoundButton> {
                 asset: IconProvider.buttonA.buildImageUrl(),
                 width: getWidth(
                   context,
-                  baseSize: 240,
+                  baseSize:isIpad(context)?180: 240,
                 ),
                 fit: BoxFit.fitWidth,
               ),
@@ -49,7 +49,7 @@ class _SoundButtonState extends State<SoundButton> {
                 value ? Icons.volume_up : Icons.volume_off,
                 size: getWidth(
                   context,
-                  baseSize: 100,
+                  baseSize: isIpad(context)? 70: 100,
                 ),
                 color: Colors.white,
               ),

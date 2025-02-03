@@ -36,35 +36,46 @@ GoRouter buildGoRouter = GoRouter(
           routes: <RouteBase>[
             GoRoute(
               path: RouteValue.home.path,
-              builder: (BuildContext context, GoRouterState state) {
-                return HomeScreen();
+              pageBuilder: (BuildContext context, GoRouterState state) {
+                return NoTransitionPage(
+                  child: HomeScreen()
+                );
               },
               routes: <RouteBase>[
                 GoRoute(
                     path: RouteValue.select.path,
-                    builder: (BuildContext context, GoRouterState state) {
-                      return LevelsScreen();
+                    pageBuilder: (BuildContext context, GoRouterState state) {
+                      return NoTransitionPage(
+                          child: LevelsScreen()
+                      );
                     },
                     routes: [
                       GoRoute(
                         path: RouteValue.game.path,
-                        builder: (BuildContext context, GoRouterState state) {
-                          return GameScreen(
-                            difficalty: state.extra as int,
+                        pageBuilder: (BuildContext context, GoRouterState state) {
+                          return NoTransitionPage(
+                              child: GameScreen(
+                                difficalty: state.extra as int,
+                              )
                           );
                         },
                       ),
                     ]),
+
                      GoRoute(
               path: RouteValue.collection.path,
-              builder: (BuildContext context, GoRouterState state) {
-                return CollectionScreen();
-              },
+                       pageBuilder: (BuildContext context, GoRouterState state) {
+                         return NoTransitionPage(
+                             child: CollectionScreen()
+                         );
+                       },
             ),
             GoRoute(
               path: RouteValue.achievements.path,
-              builder: (BuildContext context, GoRouterState state) {
-                return const AchievementScreen();
+              pageBuilder: (BuildContext context, GoRouterState state) {
+                return NoTransitionPage(
+                    child: AchievementScreen()
+                );
               },
             ),
               ],

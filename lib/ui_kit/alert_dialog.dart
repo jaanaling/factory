@@ -14,6 +14,7 @@ void showEndAlertDialog(
     BuildContext context, bool isRecord, int score, int difficulty) {
   showDialog(
     context: context,
+    barrierDismissible: false,
     builder: (BuildContext context) {
       return AlertDialog(
         contentPadding: EdgeInsets.zero,
@@ -23,7 +24,7 @@ void showEndAlertDialog(
           children: [
             AppIcon(
               asset: IconProvider.alertDialog.buildImageUrl(),
-              width: getWidth(context, baseSize: 1024),
+              width: getWidth(context, baseSize: isIpad(context)? 800: 1024),
               fit: BoxFit.fitWidth,
             ),
             Column(
@@ -32,28 +33,30 @@ void showEndAlertDialog(
                 Gap(8),
                 AppIcon(
                   asset: 'assets/images/your score.webp',
-                  width: getWidth(context, baseSize: 650),
+                  width: getWidth(context, baseSize:isIpad(context)?500: 650),
                   fit: BoxFit.fitWidth,
                 ),
                 Text(
                   score.toString(),
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontFamily: 'Atop',
                       color: Color(0xFFC30E14),
-                      fontSize: 32),
+                      fontSize: isIpad(context)?50:32),
                 ),
                 if (isRecord)
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
                     child: AppIcon(
                       asset: 'assets/images/RECORD!.webp',
-                      width: getWidth(context, baseSize: 650),
+                      width: getWidth(context, baseSize: isIpad(context)?500: 650),
                       fit: BoxFit.fitWidth,
                     ),
                   ),
                 Gap(8),
                 AnimatedButton(
                   onPressed: () {
+                    context.pop();
+                    context.pop();
                     context.pop();
                     context.pushReplacement(
                         '${RouteValue.home.path}/${RouteValue.select.path}/${RouteValue.game.path}',
@@ -67,10 +70,10 @@ void showEndAlertDialog(
                         width: getWidth(context, baseSize: 593),
                         fit: BoxFit.fitWidth,
                       ),
-                      const TextWithBorder(
+                      TextWithBorder(
                         text: 'NEW GAME',
                         borderColor: Colors.white,
-                        fontSize: 20,
+                        fontSize:isIpad(context)?30: 20,
                         color: Color(0xFFC30E14),
                       ),
                     ],
@@ -80,7 +83,8 @@ void showEndAlertDialog(
                 AnimatedButton(
                   onPressed: () {
                     context.pop();
-                    context.pushReplacement(RouteValue.home.path);
+                    context.pop();
+                    context.pop();
                   },
                   child: Stack(
                     alignment: Alignment.center,
@@ -90,10 +94,10 @@ void showEndAlertDialog(
                         width: getWidth(context, baseSize: 593),
                         fit: BoxFit.fitWidth,
                       ),
-                      const TextWithBorder(
+                       TextWithBorder(
                         text: 'MAIN MENU',
                         borderColor: Colors.white,
-                        fontSize: 20,
+                        fontSize: isIpad(context)?30:20,
                         color: Color(0xFFC30E14),
                       ),
                     ],
@@ -112,7 +116,8 @@ void showEndAlertDialog(
                 ),
                 onPressed: () {
                   context.pop();
-                  context.pushReplacement(RouteValue.home.path);
+                  context.pop();
+                  context.pop();
                 },
               ),
             ),
