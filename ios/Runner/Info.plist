@@ -27,7 +27,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>This permission is required for personalized advertising and tracking ad performance.</string>
+	<string>We use your data to provide personalized advertising and improve your experience. Your data will help us show relevant ads and measure their effectiveness.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
