@@ -49,6 +49,14 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Row(
                   children: [
+                    AnimatedButton(child: AppIcon(asset: 'assets/images/privacy.png', fit: BoxFit.fitWidth, width: getWidth(
+                      context,
+                      baseSize: isIpad(context) ? 100 : 160,
+
+                    ),), onPressed: (){
+                      context.push('${RouteValue.home.path}/${RouteValue.privacy.path}');
+                    }),
+                    Gap(16),
                     CoinsContainer(coinsCount: state.user.coins),
                     Gap(16),
                     SoundButton()
@@ -129,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         AppIcon(
                           asset: IconProvider.gift.buildImageUrl(),
-                          width: getWidth(context, baseSize: isIpad(context)? 200: 298),
+                          width: getWidth(context, baseSize: isIpad(context)? 200: 250),
                           fit: BoxFit.fitWidth,
                         ),
                         TextWithBorder(
@@ -153,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         AppIcon(
                           asset: IconProvider.giftGrey.buildImageUrl(),
-                          width: getWidth(context, baseSize: isIpad(context)? 200: 298),
+                          width: getWidth(context, baseSize: isIpad(context)? 200: 250),
                           fit: BoxFit.fitWidth,
                         ),
                         TextWithBorder(
@@ -177,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         AppIcon(
                           asset: IconProvider.giftGrey.buildImageUrl(),
-                          width: getWidth(context, baseSize: isIpad(context)? 200: 298),
+                          width: getWidth(context, baseSize: isIpad(context)? 200: 250),
                           fit: BoxFit.fitWidth,
                         ),
                         TextWithBorder(

@@ -5,6 +5,9 @@ enum RouteValue {
   home(
     path: '/home',
   ),
+  privacy(
+    path: 'privacy',
+  ),
   collection(
     path: 'collection',
   ),

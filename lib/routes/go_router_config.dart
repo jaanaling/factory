@@ -1,5 +1,6 @@
 import 'package:balloon_puzzle_factory/src/feature/rituals/presentation/collection_screen.dart';
 import 'package:balloon_puzzle_factory/src/feature/rituals/presentation/levels_screen.dart';
+import 'package:balloon_puzzle_factory/src/feature/rituals/presentation/privacy_screen.dart';
 import 'package:core_logic/core_logic.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +63,14 @@ GoRouter buildGoRouter = GoRouter(
                         },
                       ),
                     ]),
+                GoRoute(
+                  path: RouteValue.privacy.path,
+                  pageBuilder: (BuildContext context, GoRouterState state) {
+                    return NoTransitionPage(
+                        child: PrivacyPolicyScreen()
+                    );
+                  },
+                ),
 
                      GoRoute(
               path: RouteValue.collection.path,
