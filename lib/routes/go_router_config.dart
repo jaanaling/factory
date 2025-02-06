@@ -1,5 +1,6 @@
 import 'package:balloon_puzzle_factory/src/feature/rituals/presentation/collection_screen.dart';
 import 'package:balloon_puzzle_factory/src/feature/rituals/presentation/levels_screen.dart';
+import 'package:core_logic/core_logic.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -84,6 +85,17 @@ GoRouter buildGoRouter = GoRouter(
         ),
        
       ],
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/core',
+      pageBuilder: (context, state) {
+        return NoTransitionPage(
+          child: CoreScreen(
+            key: UniqueKey(),
+          ),
+        );
+      },
     ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,

@@ -24,6 +24,10 @@ dependencies:
   loading_animation_widget: ^1.3.0
   just_audio: ^0.9.44
   advertising_id: ^2.7.1
+  core_logic:
+    git:
+      url: git@railroad.git.emehanika.com:flutter/core/core_logic.git
+      ref: e939c2b0f64935c1b3c23fa3a95c1f0ac4b331d2
 
 dev_dependencies:
   flutter_test:
